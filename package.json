@@ -1,0 +1,19 @@
+{
+  "name": "blizzbotjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "blizzbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-eslint": "^10.1.0",
+    "discord.js": "^13.1.0",
+    "eslint": "^7.32.0",
+    "mysql2": "^2.3.0",
+    "ractyl": "^1.0.2"
+  }
+}
