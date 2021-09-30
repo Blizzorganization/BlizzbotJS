@@ -6,7 +6,8 @@
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 12
+        "ecmaVersion": 12,
+        "requireConfig": false
     },
     "rules": {
         "indent": [
@@ -31,5 +32,11 @@
         "sort-imports": "warn"
     },
     "root": true,
-    "parser": "babel-eslint"
+    "parser": "@babel/eslint-parser",
+    "settings": {
+        "import/parsers": [
+            ".js",
+            ".jsx"
+        ]
+    }
 }
