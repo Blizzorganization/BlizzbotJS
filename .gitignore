@@ -1,1 +1,9 @@
+#don't commit the dependencies
 node_modules/
+TODO.todo
+# Ignore log files
+**/*.log
+**/*.log.gz
+**/*-audit.json
+# Ignore the blacklisted words
+badwords.txt
