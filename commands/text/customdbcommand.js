@@ -1,6 +1,7 @@
 import { db } from "../../modules/db.js";
 import { inspect } from "util";
 import { permissions } from "../../modules/utils.js";
+import { Util } from "discord.js";
 
 const aliases = ["customdbcommand", "dbquery"];
 const perm = permissions.mod;
@@ -15,7 +16,11 @@ async function run(client, message, args) {
         .catch((reason) => {
             message.channel.send("Deine Anfrage ergab einen Fehler: " + inspect(reason));
         });
-    if (result) message.channel.send(`\`\`\`js\n${inspect(result)}\`\`\``);
+    if (result) {
+        for (const resultPart of Util.splitMessage(`\`\`\`js\n${inspect(result)}\`\`\``, { append: "```", prepend: "```js\n", char: "\n" })) {
+            message.channel.send(resultPart);
+        }
+    }
 }
 
 export { aliases, perm, run };
