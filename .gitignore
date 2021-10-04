@@ -7,3 +7,5 @@ TODO.todo
 **/*-audit.json
 # Ignore the blacklisted words
 badwords.txt
+# Ignore the config file
+config.json
