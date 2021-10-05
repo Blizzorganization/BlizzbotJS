@@ -12,11 +12,12 @@ const perm = permissions.mod;
  */
 async function run(client, message, args) {
     const sql = args.join(" ");
-    const [result] = await db.query(sql)
+    const data = await db.query(sql)
         .catch((reason) => {
             message.channel.send("Deine Anfrage ergab einen Fehler: " + inspect(reason));
         });
-    if (result) {
+    if (data) {
+        const [result] = data;
         for (const resultPart of Util.splitMessage(`\`\`\`js\n${inspect(result)}\`\`\``, { append: "```", prepend: "```js\n", char: "\n" })) {
             message.channel.send(resultPart);
         }

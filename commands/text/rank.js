@@ -21,6 +21,7 @@ async function run(client, message, args) {
                 customId: "left",
                 style: "PRIMARY",
                 label: "Links",
+                // @ts-ignore
                 disabled: postition == 1,
             }),
             new MessageButton({
@@ -36,7 +37,7 @@ async function run(client, message, args) {
         .setThumbnail(user.avatarURL({ dynamic: true }))
         .addField("Benutzer", user.username, false)
         .addField("Rang", `${postition}`, true)
-        .addField("Exp", xpUser.experience.toString(), true);
+        .addField("Exp", xpUser.get("experience").toString(), true);
     message.channel.send({
         embeds: [embed],
         components: [row],

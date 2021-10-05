@@ -13,12 +13,12 @@ async function run(client, message, args) {
     const user = getUser(client, message, args) || message.author;
     if (!user) return message.channel.send("Dieser Nutzer konnte nicht gefunden werden.");
     const mcUser = await MCUser.findByPk(user.id);
-    if (!mcUser || !mcUser.mcId) return message.channel.send("Dein Minecraft Name konnte nicht gefunden werden.");
+    if (!mcUser || !mcUser.get("mcId")) return message.channel.send("Dein Minecraft Name konnte nicht gefunden werden.");
     const embed = new MessageEmbed()
         .setTitle(user.username)
         .setColor(0xedbc5d)
-        .setThumbnail(`https://crafatar.com/renders/body/${mcUser.mcId}?overlay`)
-        .addField("Minecraft-Name", mcUser.mcName);
+        .setThumbnail(`https://crafatar.com/renders/body/${mcUser.get("mcId")}?overlay`)
+        .addField("Minecraft-Name", mcUser.get("mcName").toString());
     message.channel.send({ embeds: [embed] });
 }
 

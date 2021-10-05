@@ -2,6 +2,7 @@ import discord, { Collection } from "discord.js";
 import { loadCommands, loadEvents } from "./utils.js";
 import logger from "./logger.js";
 import { readFileSync } from "fs";
+import { EOL } from "os";
 /**
  * @param  {import("discord.js").DiscordAPIError} e
  */
@@ -38,9 +39,9 @@ class Client extends discord.Client {
         this.once("ready", async () => {
             this.logChannel = await this.channels.fetch(config.channels.log, { cache: true }).catch(handleChannelFetchError);
             if (!this.logChannel) return;
-            if (!this.logChannel.isText()) logger.warn("The log channel is not a text channel.");
+            if (!this.logChannel.isText()) logger.warn("The log channel supplied in the config file is not a text channel.");
         });
-        this.blacklist = readFileSync("badwords.txt", "utf-8").split("\n").filter((word) => word !== "");
+        this.blacklist = readFileSync("badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
     }
 }
 
