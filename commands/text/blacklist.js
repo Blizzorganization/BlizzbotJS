@@ -1,7 +1,7 @@
 import { Util } from "discord.js";
 import { permissions } from "../../modules/utils.js";
 
-const aliases = [];
+const aliases = ["blacklist"];
 const perm = permissions.mod;
 /**
  * @param  {import("../../modules/DiscordClient.js").default} client

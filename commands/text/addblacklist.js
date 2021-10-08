@@ -1,8 +1,8 @@
-import { permissions } from "../../modules/utils.js";
 import { writeFileSync } from "fs";
 import { EOL } from "os";
+import { permissions } from "../../modules/utils.js";
 
-const aliases = [];
+const aliases = ["addblacklist"];
 const perm = permissions.mod;
 /**
  * @param  {import("../../modules/DiscordClient.js").default} client
