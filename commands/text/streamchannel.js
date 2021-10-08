@@ -1,7 +1,7 @@
 import { StageChannel } from "discord.js";
 import { permissions } from "../../modules/utils.js";
 
-const aliases = [];
+const aliases = ["streamchannel"];
 const perm = permissions.user;
 /**
  * @param  {import("../../modules/DiscordClient.js").default} client
