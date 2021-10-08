@@ -1,7 +1,7 @@
-import { db } from "../../modules/db.js";
-import { inspect } from "util";
-import { permissions } from "../../modules/utils.js";
 import { Util } from "discord.js";
+import { inspect } from "util";
+import { db } from "../../modules/db.js";
+import { permissions } from "../../modules/utils.js";
 
 const aliases = ["customdbcommand", "dbquery"];
 const perm = permissions.mod;
