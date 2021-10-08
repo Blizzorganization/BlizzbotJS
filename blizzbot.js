@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 import Client from "./modules/DiscordClient.js";
 import logger from "./modules/logger.js";
 import repl from "repl";
+import { Ptero } from "./modules/ptero.js";
 
 let configFile;
 try {
@@ -28,6 +29,7 @@ try {
 
 const client = new Client(config.discord);
 db.init(config.database);
+client.ptero = new Ptero(config.pterodactyl);
 client.login(config.discord.token);
 
 process.on("SIGINT", async () => {

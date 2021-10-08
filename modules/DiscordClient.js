@@ -1,4 +1,8 @@
 import discord, { Collection } from "discord.js";
+import { copyFileSync, readFileSync, writeFileSync } from "fs";
+import { EOL } from "os";
+import { MCUser } from "./db.js";
+import logger from "./logger.js";
 import { loadCommands, loadEvents } from "./utils.js";
 import logger from "./logger.js";
 import { readFileSync } from "fs";
@@ -12,7 +16,7 @@ function handleChannelFetchError(e) {
 
 class Client extends discord.Client {
     /**
-     * @param  {import("../config.json").discord} config
+     * @param  {import("./config").discord} config
      */
     constructor(config) {
         super({
@@ -28,20 +32,67 @@ class Client extends discord.Client {
                 "USER",
             ],
         });
+        /** @type {import("./config").discord}*/
         this.config = config;
         this.commands = new Collection;
-        this.on("ready", () => logger.info("The bot just started."));
+        this.on("ready", () => { logger.info("The bot just started."); });
         loadCommands("commands/text", this.commands);
         loadEvents(this, "events");
-        this.on("debug", m => logger.debug(m));
-        this.on("warn", m => logger.warn(m));
-        this.on("error", m => logger.error(m));
+        this.on("debug", m => { logger.debug(m); });
+        this.on("warn", m => { logger.warn(m); });
+        this.on("error", m => { logger.error(m); });
         this.once("ready", async () => {
             this.logChannel = await this.channels.fetch(config.channels.log, { cache: true }).catch(handleChannelFetchError);
             if (!this.logChannel) return;
             if (!this.logChannel.isText()) logger.warn("The log channel supplied in the config file is not a text channel.");
         });
         this.blacklist = readFileSync("badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
+        /** @type {import("./ptero").Ptero}*/
+        this.ptero = undefined;
+    }
+    async syncWhitelist() {
+        const mcusers = await MCUser.findAll();
+        const twitch = [];
+        const youtube = [];
+        mcusers.forEach((mcUser) => {
+        // @ts-ignore
+            if (mcUser.get("whitelistTwitch")) {
+                twitch.push({
+                // @ts-ignore
+                    uuid: mcUser.mcId,
+                    // @ts-ignore
+                    name: mcUser.mcName,
+                });
+            }
+            if (mcUser.get("whitelistYouTube")) {
+                youtube.push({
+                // @ts-ignore
+                    uuid: mcUser.mcId,
+                    // @ts-ignore
+                    name: mcUser.mcName,
+                });
+            }
+            const ytlist = JSON.stringify(youtube, undefined, 2);
+            const twlist = JSON.stringify(twitch, undefined, 2);
+            writeFileSync("whitelist/youtube/whitelist.json", ytlist);
+            writeFileSync("whitelist/twitch/whitelist.json", twlist);
+            const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL);
+            const twPaths = readFileSync("whitelist/twitch/paths.txt", "utf8").split(EOL);
+            for (const path of ytPaths) copyFileSync("whitelist/youtube/whitelist.json", path);
+            for (const path of twPaths) copyFileSync("whitelist/twitch/whitelist.json", path);
+            const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL);
+            const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL);
+            for (const srv in pteroYtFile) {
+                const [serverid, whitelistpath] = srv.split(" ");
+                if (!serverid || !whitelistpath) return;
+                this.ptero.writeFile(serverid, whitelistpath, ytlist);
+            }
+            for (const srv in pteroTwFile) {
+                const [serverid, whitelistpath] = srv.split(" ");
+                if (!serverid || !whitelistpath) return;
+                this.ptero.writeFile(serverid, whitelistpath, twlist);
+            }
+        });
     }
 }
 

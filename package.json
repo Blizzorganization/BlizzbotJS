@@ -12,12 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "@babel/eslint-parser": "^7.15.7",
-    "discord.js": "^13.1.0",
+    "@devnote-dev/pterojs": "^1.1.8",
+    "discord.js": "^13.2.0",
     "eslint": "^7.32.0",
     "mysql2": "^2.3.0",
+    "node-fetch": "^3.0.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
-    "ractyl": "^1.0.2",
     "sequelize": "^6.6.5",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
