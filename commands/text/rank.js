@@ -1,6 +1,6 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { getUser, permissions } from "../../modules/utils.js";
 import { XPUser } from "../../modules/db.js";
+import { getUser, permissions } from "../../modules/utils.js";
 
 const aliases = ["rank", "rang"];
 const perm = permissions.user;
