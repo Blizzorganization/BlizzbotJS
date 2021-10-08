@@ -1,7 +1,9 @@
+import { Console } from "console";
 import { existsSync, readdirSync } from "fs";
+import { sep } from "path";
+import { Transform } from "stream";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
-import { sep } from "path";
 
 /**
  * @param  {string} path the command directory
@@ -76,4 +78,17 @@ function getUser(client, message, args) {
     return user;
 }
 
-export { loadCommands, loadEvents, checkWhitelist, permissions, getUser };
+const ts = new Transform({ transform(chunk, enc, cb) { cb(null, chunk); } });
+const customConsole = new Console({ stdout: ts });
+
+/**
+ * @param  {any[]} list
+ * @returns {string} the table as shown using console.table
+ */
+function createTable(list) {
+    customConsole.table(list);
+    return (ts.read() || "");
+}
+
+
+export { loadCommands, loadEvents, checkWhitelist, permissions, getUser, createTable };

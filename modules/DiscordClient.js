@@ -4,9 +4,6 @@ import { EOL } from "os";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
 import { loadCommands, loadEvents } from "./utils.js";
-import logger from "./logger.js";
-import { readFileSync } from "fs";
-import { EOL } from "os";
 /**
  * @param  {import("discord.js").DiscordAPIError} e
  */
@@ -45,6 +42,9 @@ class Client extends discord.Client {
             this.logChannel = await this.channels.fetch(config.channels.log, { cache: true }).catch(handleChannelFetchError);
             if (!this.logChannel) return;
             if (!this.logChannel.isText()) logger.warn("The log channel supplied in the config file is not a text channel.");
+            this.anfrageChannel = await this.channels.fetch(config.channels.anfrage, { cache: true }).catch(handleChannelFetchError);
+            if (!this.anfrageChannel) return;
+            if (!this.anfrageChannel.isText()) return logger.warn("The Anfrage channel supplied in the config file is not a text channel.");
         });
         this.blacklist = readFileSync("badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
         /** @type {import("./ptero").Ptero}*/

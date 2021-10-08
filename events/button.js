@@ -12,6 +12,7 @@ export async function handle(client, interaction) {
     if (!(message instanceof Message)) message = new Message(client, message);
     if (message.embeds) {
         const embed = message.embeds[0];
+        if (!embed) return;
         switch (embed.title) {
             case "Rangfunktion":
                 {

@@ -7,13 +7,16 @@ const { DataTypes, Model, Op, Sequelize } = sequelize;
 let db;
 class XPUser extends Model {
     get level() {
+        // @ts-ignore
         return Math.floor(Math.sqrt(this.experience / 10));
     }
     async getPosition() {
         return await XPUser.count({
+            // @ts-ignore
             distinct: "experience",
             where: {
                 experience: {
+                    // @ts-ignore
                     [Op.gte]: this.experience,
                 },
             },
@@ -51,6 +54,14 @@ async function init(config) {
         },
         mcName: DataTypes.STRING,
         mcId: DataTypes.UUID,
+        whitelistTwitch: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        whitelistYouTube: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     }, {
         sequelize: db,
         tableName: "mcnames",
