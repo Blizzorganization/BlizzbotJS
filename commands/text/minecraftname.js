@@ -1,6 +1,6 @@
-import { getUser, permissions } from "../../modules/utils.js";
-import { MCUser } from "../../modules/db.js";
 import { MessageEmbed } from "discord.js";
+import { MCUser } from "../../modules/db.js";
+import { getUser, permissions } from "../../modules/utils.js";
 
 const aliases = ["minecraftname", "mcname"];
 const perm = permissions.user;
