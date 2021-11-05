@@ -1,11 +1,10 @@
 import { MessageEmbed } from "discord.js";
-import { XPUser } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { XPUser } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["ranking", "rangliste"];
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  */
 async function run(client, message) {
@@ -33,4 +32,4 @@ async function run(client, message) {
     message.channel.send({ embeds });
 }
 
-export { aliases, perm, run };
+export { perm, run };

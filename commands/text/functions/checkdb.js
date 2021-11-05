@@ -1,20 +1,19 @@
 import { MessageActionRow, MessageButton, Util } from "discord.js";
 import { inspect } from "util";
-import { db } from "../../modules/db.js";
-import logger from "../../modules/logger.js";
-import { createTable, permissions } from "../../modules/utils.js";
+import { db } from "../../../modules/db.js";
+import logger from "../../../modules/logger.js";
+import { createTable, permissions } from "../../../modules/utils.js";
 
-const aliases = ["checkdb", "checkdatabase"];
-const perm = permissions.mod;
+const perm = permissions.dev;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  */
 async function run(client, message) {
     const tables = await db.getQueryInterface().showAllTables().catch((reason) => {
         logger.error("Error showing tables: " + reason);
     });
-    if (!tables) return;
+    if (!tables) return logger.log("No Tables");
     logger.info("all tables: " + inspect(tables));
     const row = new MessageActionRow();
     tables.forEach((tableName) => {
@@ -90,4 +89,4 @@ async function run(client, message) {
     });
 }
 
-export { aliases, perm, run };
+export { perm, run };

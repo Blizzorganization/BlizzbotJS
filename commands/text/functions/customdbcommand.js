@@ -1,12 +1,11 @@
 import { Util } from "discord.js";
 import { inspect } from "util";
-import { db } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { db } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["customdbcommand", "dbquery"];
 const perm = permissions.mod;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -24,4 +23,4 @@ async function run(client, message, args) {
     }
 }
 
-export { aliases, perm, run };
+export { perm, run };

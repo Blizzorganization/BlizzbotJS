@@ -1,10 +1,9 @@
-import { db } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { db } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["shutdown", "sd"];
 const perm = permissions.dev;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -15,4 +14,4 @@ async function run(client, message) {
     setTimeout(() => process.exit(0), 10000).unref();
 }
 
-export { aliases, perm, run };
+export { perm, run };

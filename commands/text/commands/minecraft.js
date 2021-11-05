@@ -1,11 +1,10 @@
 import fetch from "node-fetch";
-import { MCUser } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { MCUser } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = [];
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -24,27 +23,27 @@ async function run(client, message, args) {
     }
 }
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
 async function handle(client, message, args) {
     const name = args.join(" ");
     const siteData = await fetch("https://api.mojang.com/users/profiles/minecraft/" + name);
-    if (siteData.ok) {
+    if (siteData.status == 200) {
         let previous = true;
         let initialName;
-        const jsonData = siteData.json() || JSON.parse(siteData.text());
-        const mcuser = await MCUser.findOne({ where: { discordId: message.author.id } });
-        if (mcuser == null) {
+        const jsonData = await siteData.json() || JSON.parse(siteData.text());
+        const [mcuser] = await MCUser.findOrCreate({ where: { discordId: message.author.id } });
+        if (mcuser.get("mcName") == null) {
             previous = false;
         } else {
-            initialName = mcuser.get("name");
+            initialName = mcuser.get("mcName");
         }
-        mcuser.set("mcId", jsonData.id);
-        mcuser.set("mcName", jsonData.name);
-        mcuser.set("whitelistTwitch", client.config.roles.whitelist.twitch.some((r) => message.member.roles.cache.has(r)));
-        mcuser.set("whitelistYouTube", client.config.roles.whitelist.youtube.some((r) => message.member.roles.cache.has(r)));
+        mcuser.set({ mcId: jsonData.id });
+        mcuser.set({ mcName: jsonData.name });
+        mcuser.set({ whitelistTwitch: client.config.roles.whitelist.twitch.some((r) => message.member.roles.cache.has(r)) });
+        mcuser.set({ whitelistYouTube: client.config.roles.whitelist.youtube.some((r) => message.member.roles.cache.has(r)) });
         await mcuser.save();
         message.channel.send(!previous ? `Dein Minecraftname **${jsonData.name}** wurde erfolgreich hinzugefügt.` : `Du hast deinen Minecraftnamen von **${initialName}** auf **${jsonData.name}** aktualisiert.`);
         client.syncWhitelist();
@@ -52,4 +51,4 @@ async function handle(client, message, args) {
         message.channel.send("Dieser Name wurde nicht gefunden.");
     }
 }
-export { aliases, perm, run };
+export { perm, run };

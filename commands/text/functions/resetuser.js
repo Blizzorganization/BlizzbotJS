@@ -1,10 +1,9 @@
-import { MCUser, XPUser } from "../../modules/db.js";
-import { getUser, permissions } from "../../modules/utils.js";
+import { MCUser, XPUser } from "../../../modules/db.js";
+import { getUser, permissions } from "../../../modules/utils.js";
 
-const aliases = ["resetuser"];
 const perm = permissions.mod;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -16,4 +15,4 @@ async function run(client, message, args) {
     message.channel.send("Der Nutzer wurde zurückgesetzt.");
 }
 
-export { aliases, perm, run };
+export { perm, run };

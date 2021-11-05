@@ -1,11 +1,10 @@
 import { writeFileSync } from "fs";
 import { EOL } from "os";
-import { permissions } from "../../modules/utils.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["addblacklist"];
 const perm = permissions.mod;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -17,4 +16,4 @@ async function run(client, message, args) {
     message.channel.send("Ihre Eingabe wurde der Blacklist hinzugefügt.");
 }
 
-export { aliases, perm, run };
+export { perm, run };

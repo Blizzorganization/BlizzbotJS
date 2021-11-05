@@ -1,10 +1,9 @@
 import { StageChannel } from "discord.js";
-import { permissions } from "../../modules/utils.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["streamchannel"];
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  */
 async function run(client, message) {
@@ -21,4 +20,4 @@ async function run(client, message) {
     await message.member.voice.setChannel(streamchannel);
 }
 
-export { aliases, perm, run };
+export { perm, run };

@@ -1,11 +1,10 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { XPUser } from "../../modules/db.js";
-import { getUser, permissions } from "../../modules/utils.js";
+import { XPUser } from "../../../modules/db.js";
+import { getUser, permissions } from "../../../modules/utils.js";
 
-const aliases = ["rank", "rang"];
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  */
@@ -44,4 +43,4 @@ async function run(client, message, args) {
     });
 }
 
-export { aliases, perm, run };
+export { perm, run };

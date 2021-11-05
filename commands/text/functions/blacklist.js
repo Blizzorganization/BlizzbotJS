@@ -1,10 +1,9 @@
 import { Util } from "discord.js";
-import { permissions } from "../../modules/utils.js";
+import { permissions } from "../../../modules/utils.js";
 
-const aliases = ["blacklist"];
 const perm = permissions.mod;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  */
 async function run(client, message) {
@@ -21,4 +20,4 @@ async function run(client, message) {
     }
 }
 
-export { aliases, perm, run };
+export { perm, run };
