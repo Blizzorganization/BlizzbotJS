@@ -1,7 +1,7 @@
 import { Console } from "console";
 import { existsSync, readdirSync } from "fs";
 import { sep } from "path";
-import { Transform } from "stream";
+import { PassThrough } from "stream";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
 
@@ -14,9 +14,12 @@ async function loadCommands(path, commandMap) {
     const commandFiles = readdirSync(path);
     commandFiles.forEach(async (fileName) => {
         if (!fileName.endsWith(".js")) return;
+        logger.silly(`reading command file at ${path}${sep}${fileName}`);
         const cmd = await import(`..${sep}${path}${sep}${fileName}`);
-        if (!cmd) return logger.warn(`Command ${fileName.split(".")[0]} does not exist.`);
-        cmd.aliases.forEach((a) => commandMap.set(a, cmd));
+        const name = fileName.split(".")[0];
+        if (!cmd) return logger.warn(`Command ${name} does not exist.`);
+        if (cmd.disabled) return logger.warn(`Command ${name} is disabled.`);
+        commandMap.set(name, cmd);
     });
 
 }
@@ -58,7 +61,7 @@ const permissions = {
     dev: 10,
 };
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("./DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
  * @param  {string[]} args
  * @returns {import("discord.js").User}
@@ -78,7 +81,7 @@ function getUser(client, message, args) {
     return user;
 }
 
-const ts = new Transform({ transform(chunk, enc, cb) { cb(null, chunk); } });
+const ts = new PassThrough({ transform(chunk, enc, cb) { cb(null, chunk); } });
 const customConsole = new Console({ stdout: ts });
 
 /**
