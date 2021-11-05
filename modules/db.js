@@ -1,5 +1,5 @@
-import logger from "./logger.js";
 import sequelize from "sequelize";
+import logger from "./logger.js";
 
 const { DataTypes, Model, Op, Sequelize } = sequelize;
 
@@ -25,6 +25,7 @@ class XPUser extends Model {
 }
 class MCUser extends Model {}
 class CustomCommand extends Model {}
+class Alias extends Model {}
 
 async function init(config) {
     db = new Sequelize({
@@ -45,7 +46,7 @@ async function init(config) {
     }, {
         sequelize: db,
         tableName: "ranking",
-
+        paranoid: true,
     });
     MCUser.init({
         discordId: {
@@ -65,6 +66,7 @@ async function init(config) {
     }, {
         sequelize: db,
         tableName: "mcnames",
+        paranoid: true,
     });
     CustomCommand.init({
         commandName: DataTypes.TEXT,
@@ -72,6 +74,15 @@ async function init(config) {
         lastEditedBy: DataTypes.BIGINT,
     }, {
         sequelize: db,
+        paranoid: true,
+    });
+    Alias.init({
+        command: DataTypes.TEXT,
+        name: DataTypes.TEXT,
+        type: DataTypes.TEXT,
+    }, {
+        sequelize: db,
+        paranoid: true,
     });
     await db.authenticate().catch((e) => {logger.error(e);});
 
@@ -79,6 +90,7 @@ async function init(config) {
     await XPUser.sync({ alter: true });
     await MCUser.sync({ alter: true });
     await CustomCommand.sync({ alter: true });
+    await Alias.sync({ alter: true });
 }
 
 
@@ -87,5 +99,6 @@ export {
     XPUser,
     MCUser,
     CustomCommand,
+    Alias,
     init,
 };
