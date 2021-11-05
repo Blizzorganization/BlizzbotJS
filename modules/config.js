@@ -1,13 +1,11 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import logger from "./logger";
+import logger from "./logger.js";
 
 const defaultConfig = {
     discord: {
-        token: config.discord.token || (() => {
-            logger.error("No token supplied. Get one from https://discord.com/developers/applications");
-            process.exit(1);
-        })(),
+        token: "The Bot token. Get one from https://discord.com/developers/applications",
         prefix: "!",
+        slashGuild: "1234",
         channels: {
             log: "1234",
             commands: [
@@ -15,8 +13,12 @@ const defaultConfig = {
                 "5678",
             ],
             standard: "1234",
-            adminCommands: "1234",
+            adminCommands: ["1234", "5678"],
             anfrage: "1234",
+            verificate: "1234",
+            voiceCategory: [
+                "1234",
+            ],
         },
         roles: {
             whitelist: {
@@ -24,10 +26,14 @@ const defaultConfig = {
                 twitch: ["1234", "5678"],
             },
             noFilter: ["1234", "5678"],
+            verify: "1234",
+            mute: "1234",
+            dev: "1234",
         },
         emojis: {
             left: "1234",
             right: "5678",
+            randomReaction: "<:name:id>",
         },
     },
     database: {
@@ -45,21 +51,28 @@ const defaultConfig = {
 };
 
 if (!existsSync("config.json")) {
-    logger.error("Es existiert keine Konfigurationsdatei.");
+    logger.error("There is no configuration file.");
     writeFileSync("config.json", JSON.stringify(defaultConfig, undefined, 2));
-    logger.info("Konfigurationsdatei erstellt, bitte ausfüllen.");
+    logger.info("Created a configuration file - please fill.");
     process.exit(1);
 }
 const config = JSON.parse(readFileSync("config.json", "utf8"));
 
 const discord = {
-    token: config.discord.token,
+    token: config.discord.token || (() => {
+        logger.error("No token supplied. Get one from https://discord.com/developers/applications");
+        process.exit(1);
+    })(),
+    slashGuild: config.discord.slashGuild || "1234",
     prefix: config.discord.prefix || "!",
     channels: {
-        log: config.discord.channels.log,
+        log: config.discord.channels.log || "1234",
         commands: config.discord.channels.commands || [],
-        adminCommands: "1234",
-        anfrage: "1234",
+        adminCommands: config.discord.channels.adminCommands || [],
+        anfrage: config.discord.channels.anfrage || "1234",
+        verificate: config.discord.channels.verificate || "1234",
+        standard: config.discord.channels.standard || "1234",
+        voiceCategory: config.discord.channels.voiceCategory || [],
     },
     roles: {
         whitelist: {
@@ -67,10 +80,14 @@ const discord = {
             twitch:  config.discord.roles.whitelist.twitch || [],
         },
         noFilter: config.discord.roles.noFilter || [],
+        verify: config.discord.roles.verify || "1234",
+        mute: config.discord.roles.mute || "1234",
+        dev: config.discord.roles.dev || "1234",
     },
     emojis: {
         left: config.discord.emojis.left || "1234",
         right: config.discord.emojis.right || "5678",
+        randomReaction: config.discord.emojis.ranodmReaction || "<:ZZBlizzor:493814042780237824>",
     },
 };
 const database = {
@@ -82,8 +99,8 @@ const database = {
     type: ["mysql", "postgres"].includes(config.database.type) ? config.database.type : "postgres",
 };
 const pterodactyl = {
-    host: "",
-    apiKey: "",
+    host: config.pterodactyl.host || "",
+    apiKey: config.pterodactyl.apiKey || "",
 };
 
 export {
