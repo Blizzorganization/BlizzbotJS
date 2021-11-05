@@ -12,8 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@babel/eslint-parser": "^7.15.7",
-    "@devnote-dev/pterojs": "^1.1.8",
-    "discord.js": "^13.2.0",
+    "@devnote-dev/pterojs": "^1.1.9",
+    "@discordjs/builders": "^0.8.2",
+    "discord.js": "^13.3.1",
     "eslint": "^7.32.0",
     "mysql2": "^2.3.0",
     "node-fetch": "^3.0.0",
