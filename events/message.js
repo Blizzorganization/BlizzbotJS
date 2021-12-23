@@ -1,6 +1,6 @@
 import { Alias, CustomCommand, XPUser } from "../modules/db.js";
 import logger from "../modules/logger.js";
-import { permissions } from "../modules/utils.js";
+import { permissions, verify } from "../modules/utils.js";
 
 const linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[A-Z0-9+&@#/%=~_|$])/igm;
 
@@ -89,7 +89,7 @@ function checkMessage(client, message) {
         const newLinks = previousLinks;
         let shouldUnverify = false;
         links.forEach((link) => {
-            if (previousLinks.some((previousLink) => previousLink.url == link))shouldUnverify = true;
+            if (previousLinks.some((previousLink) => previousLink.url == link)) shouldUnverify = true;
             newLinks.push({ ts: message.createdAt.getTime(), url: link });
         });
         if (shouldUnverify && message.member.roles.cache.has(client.config.roles.verify)) unverify(client, message.member);
@@ -100,7 +100,7 @@ function checkMessage(client, message) {
         if (client.blacklist.some((blword) => lowerMessage.indexOf(blword) !== -1)) {
             message.delete().catch((e) => logger.error("Received an error deleting a message:\n" + e.stack));
             message.author.createDM().then((dmChannel) => {
-                dmChannel.send(`Ihre Nachricht mit dem Inhalt **${message.content}** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.`);
+                dmChannel.send(`Ihre Nachricht mit dem Inhalt **${message.content.slice(0, 1900)}** wurde entfernt. Melden Sie sich bei Fragen an einen Moderator.`);
             });
         }
         return true;
@@ -119,6 +119,7 @@ export async function handle(client, message) {
     if (Math.random() > 0.999) message.react(client.config.emojis.randomReaction);
     if (message.channelId == client.config.channels.verificate && message.content.toLowerCase == "!zz") {
         message.member.roles.add(client.config.roles.verify);
+        verify(client, message.author.username);
         message.delete();
         return;
     }
