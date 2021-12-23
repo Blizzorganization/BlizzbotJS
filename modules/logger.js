@@ -37,8 +37,15 @@ logger.add(new transports.Console({
         format.colorize(),
         format.simple(),
     ),
-    level: "info",
+    level: !(["", "0"].includes(process.env.DEBUG)) ? "silly" : "info",
 }));
-process.on("uncaughtException", error => logger.log("error", error));
+if (!(["", "0"].includes(process.env.DEBUG))) {
+    logger.add(new transports.File({
+        dirname: "logs",
+        filename: "debug.log",
+        level: "silly",
+    }));
+}
+process.on("uncaughtException", error => logger.error(error));
 
 export default logger;

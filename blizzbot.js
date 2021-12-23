@@ -6,11 +6,17 @@ import Client from "./modules/DiscordClient.js";
 import logger from "./modules/logger.js";
 import { Ptero } from "./modules/ptero.js";
 
+logger.silly("ensuring the existence of a badwords.txt file");
 if (!existsSync("badwords.txt")) writeFileSync("badwords.txt", "", { encoding: "utf-8" });
 
+
+logger.silly("creating the discord client");
 const client = new Client(discord);
+logger.silly("initializing the database");
 db.init(database);
+logger.silly("creating the pterodactyl client");
 client.ptero = new Ptero(pterodactyl);
+logger.info("Discord Client logging in.");
 client.login(discord.token);
 async function stop() {
     logger.info("Shutting down, please wait.");

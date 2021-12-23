@@ -45,7 +45,7 @@ class Client extends discord.Client {
         loadCommands("commands/slash", this.slashCommands);
         loadCommands("commands/context", this.contextCommands);
         loadEvents(this, "events");
-        this.on("debug", m => { logger.debug(m); });
+        if (process.env.DEBUG == "2") this.on("debug", m => { logger.debug(m); });
         this.on("warn", m => { logger.warn(m); });
         this.on("error", m => { logger.error(m); });
         this.once("ready", async () => {
@@ -53,8 +53,11 @@ class Client extends discord.Client {
             if (!this.logChannel) return;
             if (!this.logChannel.isText()) logger.warn("The log channel supplied in the config file is not a text channel.");
             this.anfrageChannel = await this.channels.fetch(config.channels.anfrage, { cache: true }).catch(handleChannelFetchError);
-            if (!this.anfrageChannel) return;
+            if (!this.anfrageChannel) return logger.warn("The 'anfrage' channel supplied in the config file is not a known channel.");
             if (!this.anfrageChannel.isText()) return logger.warn("The Anfrage channel supplied in the config file is not a text channel.");
+            this.standardChannel = await this.channels.fetch(config.channels.standard, { cache: true }).catch(handleChannelFetchError);
+            if (!this.standardChannel) return logger.warn("The 'standard' channel supplied in the config file is not a known channel.");
+            if (!this.standardChannel.isText()) return logger.warn("The 'standard' channel supplied in the config file is not a text channel.");
             const slashGuild = await this.guilds.fetch(this.config.slashGuild).catch(() => {
                 logger.warn("received an error while trying to fetch the slashGuild.");
             });
