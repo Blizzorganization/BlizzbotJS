@@ -1,5 +1,5 @@
 import discord, { Collection } from "discord.js";
-import { copyFileSync, readFileSync, writeFileSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { EOL } from "os";
 import { inspect } from "util";
 import { MCUser } from "./db.js";
@@ -116,6 +116,9 @@ class Client extends discord.Client {
             }
             const ytlist = JSON.stringify(youtube, undefined, 2);
             const twlist = JSON.stringify(twitch, undefined, 2);
+            if (!existsSync("whitelist")) mkdirSync("whitelist");
+            if (!existsSync("whitelist/twitch")) mkdirSync("whitelist/twitch");
+            if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
             writeFileSync("whitelist/youtube/whitelist.json", ytlist);
             writeFileSync("whitelist/twitch/whitelist.json", twlist);
             const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL);
