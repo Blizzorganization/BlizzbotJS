@@ -31,5 +31,4 @@ async function run(client, message) {
     }
     message.channel.send({ embeds });
 }
-
 export { perm, run };

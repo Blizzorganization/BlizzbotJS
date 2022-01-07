@@ -40,5 +40,5 @@ const setup = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setName("minecraft")
-    .setDescription("Teile dem Bot deinen Minecraft Namen für die Subserver mit");
+    .setDescription("Teile dem Bot deinen Minecraft Namen für die Subserver mit").toJSON();
 export { perm, run, setup };

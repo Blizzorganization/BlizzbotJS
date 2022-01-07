@@ -17,7 +17,7 @@ export async function handle(client, interaction) {
             case "Rangfunktion":
                 {
                     let position = parseInt(
-                        message.embeds[0].fields.find((f) => f.name == "Rang").value,
+                        message.embeds[0].fields.find((f) => f.name === "Rang").value,
                     );
                     if (interaction.customId === "left") {position = Math.max(1, position - 1);}
                     if (interaction.customId === "right") position += 1;
@@ -42,7 +42,7 @@ export async function handle(client, interaction) {
                             { name: "Rang", value: `${position}`, inline: true },
                             { name: "Exp", value: `${next.experience}`, inline: true },
                         ]);
-                        const user = client.users.resolve(XPUser.discordId);
+                        const user = client.users.resolve(next.discordId);
                         newEmbed.setThumbnail(user ?
                             (user.partial ?
                                 (await user.fetch()).avatarURL({ dynamic: true })
@@ -63,7 +63,7 @@ export async function handle(client, interaction) {
                                 customId: "left",
                                 style: "PRIMARY",
                                 label: "Links",
-                                disabled: position == 1,
+                                disabled: position === 1,
                             }),
                             new MessageButton({
                                 emoji: client.emojis.resolve(client.config.emojis.right),

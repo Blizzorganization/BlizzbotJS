@@ -42,5 +42,4 @@ async function run(client, message, args) {
         components: [row],
     });
 }
-
 export { perm, run };

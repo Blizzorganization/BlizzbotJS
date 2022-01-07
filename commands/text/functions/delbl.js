@@ -16,5 +16,4 @@ async function run(client, message, args) {
     writeFileSync("badwords.txt", client.blacklist.join(EOL));
     message.channel.send("Ihre Eingabe wurde von der Blacklist entfernt.");
 }
-
 export { perm, run };

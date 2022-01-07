@@ -12,9 +12,9 @@ async function run(client, message, args) {
         message.reply({ content: "Du musst drei Argumente angeben:\nDen Namen, den Typ (ccmd/cmd) und auf welchen Befehl verwiesen werden soll." });
         return;
     }
-    const name = args.shift().toLowerCase();
+    const name = args.shift().toLowerCase().replace(client.config.prefix, "");
     const type = args.shift().toLowerCase();
-    const ref = args.shift().toLowerCase();
+    const ref = args.shift().toLowerCase().replace(client.config.prefix, "");
     switch (type) {
         case "ccmd":
             {
@@ -27,11 +27,11 @@ async function run(client, message, args) {
             break;
         case "cmd":
             if (!client.commands.has(ref)) {
-                message.channel.send({ content: "Diesen Befehl kenne ich nicht." });
+                message.reply({ content: "Diesen Befehl kenne ich nicht." });
             }
             break;
         default:
-            message.channel.send({ content: "Es gibt nur die Typen \"cmd\" und \"ccmd\"." });
+            message.reply({ content: "Es gibt nur die Typen `cmd` und `ccmd`." });
             return;
     }
     await Alias.create({
@@ -39,7 +39,6 @@ async function run(client, message, args) {
         type,
         command: ref,
     });
-    message.channel.send({ content: "Der Alias wurde erstellt." });
+    message.reply({ content: "Der Alias wurde erstellt." });
 }
-
 export { perm, run };

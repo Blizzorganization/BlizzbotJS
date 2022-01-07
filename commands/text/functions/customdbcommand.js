@@ -3,7 +3,7 @@ import { inspect } from "util";
 import { db } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
-const perm = permissions.mod;
+const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
@@ -13,7 +13,9 @@ async function run(client, message, args) {
     const sql = args.join(" ");
     const data = await db.query(sql)
         .catch((reason) => {
-            message.channel.send("Deine Anfrage ergab einen Fehler: " + inspect(reason));
+            for (const reasonPart of Util.splitMessage(`Deine Anfrage ergab einen Fehler: ${inspect(reason)}`)) {
+                message.channel.send(reasonPart);
+            }
         });
     if (data) {
         const [result] = data;
@@ -22,5 +24,4 @@ async function run(client, message, args) {
         }
     }
 }
-
 export { perm, run };

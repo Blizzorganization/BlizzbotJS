@@ -28,6 +28,6 @@ const setup = new SlashCommandBuilder()
             .setRequired(false),
     )
     .setName("minecraftname")
-    .setDescription("Frage einen Minecraft Namen ab");
+    .setDescription("Frage einen Minecraft Namen ab").toJSON();
 
 export { perm, run, setup };

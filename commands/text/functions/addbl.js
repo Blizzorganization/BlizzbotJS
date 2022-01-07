@@ -13,7 +13,6 @@ async function run(client, message, args) {
     client.blacklist.push(args.join(" ").toLowerCase());
     client.blacklist = client.blacklist.sort();
     writeFileSync("badwords.txt", client.blacklist.join(EOL));
-    message.channel.send("Ihre Eingabe wurde der Blacklist hinzugefügt.");
+    message.channel.send(`Das Wort \`${args.join(" ").toLowerCase()}\` wurde der Blacklist hinzugefügt.`);
 }
-
 export { perm, run };

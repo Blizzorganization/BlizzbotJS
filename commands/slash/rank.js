@@ -50,6 +50,6 @@ const setup = new SlashCommandBuilder()
             .setDescription("Wessen Rang möchtest du wissen?"),
     )
     .setName("rank")
-    .setDescription("Frage den Rang eines Nutzers ab");
+    .setDescription("Frage den Rang eines Nutzers ab").toJSON();
 
 export { perm, run, setup };

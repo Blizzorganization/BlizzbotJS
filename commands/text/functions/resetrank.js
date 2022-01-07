@@ -1,7 +1,7 @@
 import { XPUser } from "../../../modules/db.js";
 import { getUser, permissions } from "../../../modules/utils.js";
 
-const perm = permissions.mod;
+const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
@@ -14,5 +14,4 @@ async function run(client, message, args) {
     await (await xpuser).save();
     message.channel.send("Der Rang dieses Nutzers wurde zurückgesetzt.");
 }
-
 export { perm, run };

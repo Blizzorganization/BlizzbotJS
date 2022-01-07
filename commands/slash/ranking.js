@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, SlashCommandNumberOption } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandIntegerOption } from "@discordjs/builders";
 import { MessageEmbed } from "discord.js";
 import { XPUser } from "../../modules/db.js";
 import { permissions } from "../../modules/utils.js";
@@ -16,6 +16,7 @@ async function run(client, interaction) {
         },
         order: [["experience", "DESC"]],
         limit: 10,
+        offset: 10 * ((interaction.options.getInteger("seite") || 1) - 1),
     });
     const embeds = [];
     for (const user of ranking) {
@@ -30,17 +31,22 @@ async function run(client, interaction) {
             .addField("Exp", user.get("experience").toString() || "0", true);
         embeds.push(embed);
     }
+    if (embeds.length == 0) {
+        embeds.push(new MessageEmbed()
+            .setTitle("So viele Nutzer haben keine Erfahrung gesammelt.")
+            .setColor(0xCC0000));
+    }
     interaction.reply({ embeds });
 }
 
 const setup = new SlashCommandBuilder()
-    .addNumberOption(
-        new SlashCommandNumberOption()
+    .addIntegerOption(
+        new SlashCommandIntegerOption()
             .setName("seite")
             .setDescription("Welche Seite möchtest du dir anzeigen lassen?")
-            .setRequired(true),
+            .setRequired(false),
     )
     .setName("ranking")
-    .setDescription("Zeigt die Rangliste der Erfahrung");
+    .setDescription("Zeigt die Rangliste der Erfahrung").toJSON();
 
 export { perm, run, setup };

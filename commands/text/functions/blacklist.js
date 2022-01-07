@@ -19,5 +19,4 @@ async function run(client, message) {
         await message.channel.send(toSend);
     }
 }
-
 export { perm, run };

@@ -20,5 +20,4 @@ async function run(client, message, args) {
         .addField("Minecraft-Name", mcUser.get("mcName").toString());
     message.channel.send({ embeds: [embed] });
 }
-
 export { perm, run };

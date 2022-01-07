@@ -1,3 +1,4 @@
+import { Util } from "discord.js";
 import { CustomCommand } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
@@ -9,8 +10,10 @@ const perm = permissions.mod;
  */
 async function run(client, message) {
     const cmds = await CustomCommand.findAll();
-    const commandNames = cmds.map((cmd) => cmd.commandName);
-    message.reply({ content: `Es existieren folgende Befehle: ${commandNames.join(", ")}` });
+    const commandNames = cmds.map((cmd) => `${client.config.prefix}${cmd.commandName}`);
+    const msg = `Es existieren folgende Befehle: ${commandNames.join(", ")}`;
+    for (const content of Util.splitMessage(msg, { char: ", " })) {
+        await message.reply({ content });
+    }
 }
-
 export { perm, run };

@@ -19,5 +19,4 @@ async function run(client, message) {
     await streamchannel.setName("Stream-Channel");
     await message.member.voice.setChannel(streamchannel);
 }
-
 export { perm, run };

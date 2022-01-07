@@ -25,5 +25,4 @@ async function run(client, message) {
         }
     });
 }
-
 export { perm, run };

@@ -13,5 +13,4 @@ async function run(client, message, args) {
     if (!(channel.isText())) return message.channel.send("Der in der Config angegebene Kanal ist kein Textkanal.");
     channel.send(text);
 }
-
 export { perm, run };

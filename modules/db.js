@@ -87,18 +87,18 @@ async function init(config) {
     await db.authenticate().catch((e) => {logger.error(e);});
 
     logger.info("Database connection successful.");
-    await XPUser.sync({ alter: true });
-    await MCUser.sync({ alter: true });
-    await CustomCommand.sync({ alter: true });
     await Alias.sync({ alter: true });
+    await CustomCommand.sync({ alter: true });
+    await MCUser.sync({ alter: true });
+    await XPUser.sync({ alter: true });
 }
 
 
 export {
-    db,
-    XPUser,
-    MCUser,
-    CustomCommand,
     Alias,
+    CustomCommand,
+    db,
     init,
+    MCUser,
+    XPUser,
 };

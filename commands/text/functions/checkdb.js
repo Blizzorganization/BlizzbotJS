@@ -35,11 +35,11 @@ async function run(client, message) {
                 [tableData] = await db.query("SELECT * FROM \"ranking\" ORDER BY experience DESC;");
                 table = createTable(tableData.map((elem) => {
                     return {
-                        name:   elem.username,
-                        active: elem.available,
-                        exp:    elem.experience,
-                        dcid:   elem.discordId,
-                        gid:    elem.guildId,
+                        "Name":             elem.username,
+                        "Active":           elem.available ? "yes" : "no",
+                        "Experience":       elem.experience,
+                        "Discord ID":       elem.discordId,
+                        "Discord Server ID":elem.guildId,
                     };
                 }));
                 break;
@@ -47,31 +47,41 @@ async function run(client, message) {
                 [tableData] = await db.query("SELECT * FROM \"mcnames\";");
                 table = createTable(tableData.map((elem) => {
                     return {
-                        mcName: elem.mcName,
-                        uuid:   elem.mcId,
-                        dcid:   elem.discordId,
-                        yt:     elem.whitelistYouTube,
-                        tw:     elem.whitelistTwitch,
+                        "Minecraft Name":   elem.mcName,
+                        "Minecraft UUID":   elem.mcId,
+                        "Discord ID":       elem.discordId,
+                        "Whitelist YouTube":elem.whitelistYouTube ? "yes" : "no",
+                        "Whitelist Twitch": elem.whitelistTwitch ? "yes" : "no",
                     };
                 }));
-                table = createTable(tableData);
                 break;
             case "CustomCommands":
                 [tableData] = await db.query("SELECT * FROM \"CustomCommands\";");
                 table = createTable(tableData.map((elem) => {
                     return {
-                        name: elem.commandName,
-                        response: elem.response,
-                        "last editor": elem.lastEditedBy,
+                        name:               elem.commandName,
+                        response:           elem.response,
+                        "last editor":      elem.lastEditedBy,
+                        "last edit time":   elem.updatedAt.toLocaleString("de-DE"),
+                        "deleted":          elem.deletedAt === null ? "no" : "yes",
                     };
                 }));
-                table = createTable(tableData);
+                break;
+            case "Aliases":
+                [tableData] = await db.query("SELECT * FROM \"Aliases\";");
+                table = createTable(tableData.filter((elem) => elem.deletedAt === null).map((elem) => {
+                    return {
+                        "command":      elem.command,
+                        "alias":        elem.name,
+                        "command type": elem.type,
+                    };
+                }));
                 break;
             default:
                 table = createTable(tableData);
                 break;
         }
-        table = "```fix\n" + table + "```";
+        table = `${interaction.customId}\n\`\`\`fix\n${table}\`\`\``;
         const splitTable = Util.splitMessage(table, {
             append: "```",
             prepend: "```fix\n",
@@ -81,12 +91,11 @@ async function run(client, message) {
         for (const toSend of splitTable) {
             if (!replied) {
                 replied = true;
-                interaction.reply(toSend);
+                await interaction.reply(toSend);
             } else {
-                interaction.message.channel.send(toSend);
+                await interaction.message.channel.send(toSend);
             }
         }
     });
 }
-
 export { perm, run };

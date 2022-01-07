@@ -49,7 +49,6 @@ async function loadEvents(listener, directory) {
         if (!event.handle || !event.name) return logger.error(`Event ${directory}${sep}${file} does not have a handle and a name property.`);
         listener.on(event.name, event.handle.bind(null, listener));
     });
-
 }
 
 const permissions = {
@@ -93,5 +92,14 @@ function createTable(list) {
     return (ts.read() || "");
 }
 
+/**
+ * @param  {import("./DiscordClient").default} client
+ * @param  {string} username
+ */
+function verify(client, username) {
+    if (!client.welcomeTexts || client.welcomeTexts.length === 0) return logger.silly("There are no welcome messages.");
+    const msg = client.welcomeTexts[Math.floor(Math.random() * client.welcomeTexts.length)].replace(/Name/g, `**${username}**`);
+    client.standardChannel.send({ content: msg });
+}
 
-export { loadCommands, loadEvents, checkWhitelist, permissions, getUser, createTable };
+export { loadCommands, loadEvents, checkWhitelist, permissions, getUser, createTable, verify };

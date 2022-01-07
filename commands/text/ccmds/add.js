@@ -15,17 +15,16 @@ async function run(client, message, args) {
         });
         return;
     }
-    const name = args.shift().toLowerCase();
+    let name = args.shift().toLowerCase();
+    if (name.startsWith(client.config.prefix)) name = name.replace(client.config.prefix, "");
     const response = args.join(" ");
     const lastEditor = message.author.id;
-    const ccmd = await CustomCommand.findOne({ where: { commandName: name } });
-    if (!ccmd) {
-        message.reply({ content: "Diesen Befehl gibt es nicht." });
-        return;
-    }
-    ccmd.update({ response, lastEditedBy: lastEditor });
-    logger.info(`Updated Customcommand: ${ccmd.name}`);
-    message.reply({ content: `Folgender CustomCommand wurde hinzugefügt: ${ccmd.name}\n${ccmd.response}` });
+    const ccmd = await CustomCommand.create({
+        commandName: name,
+        response,
+        lastEditedBy: lastEditor,
+    });
+    logger.info(`Added Customcommand: ${ccmd.commandName}`);
+    message.reply({ content: `Der Befehl ${client.config.prefix}${ccmd.commandName} wurde hinzugefügt` });
 }
-
 export { perm, run };

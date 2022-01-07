@@ -13,7 +13,9 @@ async function run(client, interaction) {
     if (!(user instanceof User)) user = await client.users.fetch(user.id);
     const msg = await user.send("Bitte schreiben Sie mir Ihre Anfrage in einer Nachricht:").catch((reason) => {
         interaction.reply(`Beim Senden der Nachricht ist ein Fehler aufgetreten: ${reason.toString()}`);
+        return;
     });
+    await interaction.reply({ content: "Sie haben eine neue Direktnachricht erhalten.", ephemeral: true });
     if (!msg) return;
     const coll = msg.channel.createMessageCollector({ max: 1, filter: (m) => m.author.id === interaction.member.user.id });
     coll.on("collect", async (m) => {
@@ -33,6 +35,6 @@ async function run(client, interaction) {
 }
 const setup = new SlashCommandBuilder()
     .setName("anfrage")
-    .setDescription("Sende eine Anfrage an die Moderatoren");
+    .setDescription("Sende eine Anfrage an die Moderatoren").toJSON();
 
 export { perm, run, setup };

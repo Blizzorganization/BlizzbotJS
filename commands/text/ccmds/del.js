@@ -1,4 +1,4 @@
-import { CustomCommand } from "../../../modules/db.js";
+import { Alias, CustomCommand } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.mod;
@@ -14,14 +14,18 @@ async function run(client, message, args) {
         });
         return;
     }
-    const name = args.shift().toLowerCase();
+    let name = args.shift().toLowerCase();
+    if (name.startsWith(client.config.prefix)) name = name.replace(client.config.prefix, "");
     const ccmd = await CustomCommand.findOne({ where: { commandName: name } });
     if (!ccmd) {
         message.reply({ content: "Ich kenne keinen solchen Befehl." });
         return;
     }
     await ccmd.destroy();
-    message.reply({ content: `Der Befehl ${name} wurde gelöscht.` });
+    const linkedAliases = await Alias.destroy({ where: {
+        command: name,
+        type: "ccmd",
+    } });
+    message.reply({ content: `Der Befehl ${client.config.prefix}${name} und seine ${linkedAliases} zugehörigen Aliase wurdem gelöscht.` });
 }
-
 export { perm, run };
