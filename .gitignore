@@ -1,11 +1,16 @@
 #don't commit the dependencies
 node_modules/
 TODO.todo
+
 # Ignore log files
-**/*.log
-**/*.log.gz
-**/*-audit.json
-# Ignore the blacklisted words
+logs/
+
+# Ignore the blacklisted words as well as the greeting messages
 badwords.txt
+welcome.txt
+
 # Ignore the config file
 config.json
+
+#don't commit documentation
+zdocs/

@@ -1,9 +1,10 @@
 import discord, { Collection } from "discord.js";
 import { copyFileSync, readFileSync, writeFileSync } from "fs";
 import { EOL } from "os";
+import { inspect } from "util";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
-import { loadCommands, loadEvents } from "./utils.js";
+import { loadCommands, loadEvents, permissions } from "./utils.js";
 /**
  * @param  {import("discord.js").DiscordAPIError} e
  */
@@ -13,7 +14,7 @@ function handleChannelFetchError(e) {
 
 class Client extends discord.Client {
     /**
-     * @param  {import("./config").discord} config
+     * @param  {import("../typings/config")["blizzbot"]["discord"]} config
      */
     constructor(config) {
         super({
@@ -31,7 +32,7 @@ class Client extends discord.Client {
                 "USER",
             ],
         });
-        /** @type {import("./config.js").discord}*/
+        /** @type {import("../typings/config")["blizzbot"]["discord"]}*/
         this.config = config;
         this.commands = new Collection;
         this.slashCommands = new Collection;
@@ -43,9 +44,8 @@ class Client extends discord.Client {
         loadCommands("commands/text/functions", this.commands);
         loadCommands("commands/text/ccmds", this.commands);
         loadCommands("commands/slash", this.slashCommands);
-        loadCommands("commands/context", this.contextCommands);
         loadEvents(this, "events");
-        if (process.env.DEBUG == "2") this.on("debug", m => { logger.debug(m); });
+        if (process.env.DEBUG === "2") this.on("debug", m => { logger.debug(m); });
         this.on("warn", m => { logger.warn(m); });
         this.on("error", m => { logger.error(m); });
         this.once("ready", async () => {
@@ -62,11 +62,33 @@ class Client extends discord.Client {
                 logger.warn("received an error while trying to fetch the slashGuild.");
             });
             if (!slashGuild) return;
-            const slashSetup = this.slashCommands.map((cmd) => cmd.setup.toJson());
+            const slashSetup = this.slashCommands.map((cmd, name) => {
+                logger.silly(`Parsing Command ${name}`);
+                logger.silly(`Command setup is ${inspect(cmd.setup)}`);
+                return cmd.setup;
+            });
             this.contextCommands.forEach((cmd) => slashSetup.push(cmd.toJson()));
-            slashGuild.commands.set(slashSetup);
+            const slashCommands = await slashGuild.commands.set(slashSetup);
+            const fullPermissions = new Array;
+            slashCommands.filter((cmd) => this.slashCommands.get(cmd.name).perm === permissions.mod).forEach((cmd, id) => {
+                /** @type {import("discord.js").GuildApplicationCommandPermissionData} */
+                const perm = {
+                    id,
+                    permissions: [{
+                        id: config.roles.mod,
+                        permission: true,
+                        type: "ROLE",
+                    }],
+                };
+                fullPermissions.push(perm);
+            });
+            logger.silly(`slash perms are ${inspect(fullPermissions)}`);
+            slashGuild.commands.permissions.set({
+                fullPermissions,
+            });
         });
         this.blacklist = readFileSync("badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
+        this.welcomeTexts = readFileSync("welcome.txt", "utf-8").split(EOL).filter((word) => word !== "");
         /** @type {import("./ptero").Ptero}*/
         this.ptero = undefined;
     }
@@ -86,7 +108,7 @@ class Client extends discord.Client {
             }
             if (mcUser.get("whitelistYouTube")) {
                 youtube.push({
-                // @ts-ignore
+                    // @ts-ignore
                     uuid: mcUser.mcId,
                     // @ts-ignore
                     name: mcUser.mcName,

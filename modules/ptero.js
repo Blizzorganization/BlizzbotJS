@@ -1,12 +1,13 @@
 import pkg from "@devnote-dev/pterojs";
+import logger from "./logger.js";
 
-const { PteroApp } = pkg;
+const { PteroClient, ClientServer } = pkg;
 
 export class Ptero {
-    #ptero;
+    ptero;
     constructor(config) {
-        this.#ptero = new PteroApp(config.host, config.apiKey, { fetchServers: true, cacheServers: true });
-        this.#ptero.connect();
+        this.ptero = new PteroClient(config.host, config.apiKey, { fetchServers: true, cacheServers: true });
+        this.ptero.connect();
     }
     /**
      * @param {string} srvid
@@ -14,7 +15,10 @@ export class Ptero {
      * @param {string} content
      */
     async writeFile(srvid, filepath, content) {
-        const srv = await this.#ptero.servers.fetch(srvid);
+        const srv = await this.ptero.servers.fetch(srvid);
+        if (!(srv instanceof ClientServer)) return;
+        logger.silly("writing file to pterodactyl server");
         srv.files.write(filepath, content);
+        logger.silly("wrote file to pterodactyl server.");
     }
 }

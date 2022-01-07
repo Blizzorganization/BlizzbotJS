@@ -1,6 +1,8 @@
 import winston from "winston";
 import "winston-daily-rotate-file";
 
+process.env.DEBUG = process.env.DEBUG ?? "0";
+
 const { createLogger, format, transports } = winston;
 
 const logger = createLogger({
@@ -49,3 +51,4 @@ if (!(["", "0"].includes(process.env.DEBUG))) {
 process.on("uncaughtException", error => logger.error(error));
 
 export default logger;
+logger.info(`The current Loglevel is ${process.env.DEBUG}`);
