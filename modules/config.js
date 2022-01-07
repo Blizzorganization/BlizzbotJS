@@ -58,6 +58,7 @@ if (!existsSync("config.json")) {
 }
 const config = JSON.parse(readFileSync("config.json", "utf8"));
 
+/** @type {import("../typings/config")["blizzbot"]["discord"]}*/
 const discord = {
     token: config.discord.token || (() => {
         logger.error("No token supplied. Get one from https://discord.com/developers/applications");
@@ -92,14 +93,16 @@ const discord = {
         randomReaction: config.discord.emojis.ranodmReaction || "<:ZZBlizzor:493814042780237824>",
     },
 };
+/** @type {import("../typings/config")["blizzbot"]["database"]}*/
 const database = {
-    host: "localhost",
+    host: config.database.host || "localhost",
     port: config.database.port || 5432,
     user: config.database.user || "blizzbot",
     database: config.database.database || "blizzbot",
     password: config.database.password || "",
     type: ["mysql", "postgres"].includes(config.database.type) ? config.database.type : "postgres",
 };
+/** @type {import("../typings/config")["blizzbot"]["pterodactyl"]}*/
 const pterodactyl = {
     host: config.pterodactyl.host || "",
     apiKey: config.pterodactyl.apiKey || "",
