@@ -14,7 +14,7 @@
     "@babel/eslint-parser": "^7.15.7",
     "@devnote-dev/pterojs": "^1.2.0",
     "@discordjs/builders": "^0.11.0",
-    "discord.js": "^13.5.0",
+    "discord.js": "^13.5.1",
     "eslint": "^7.32.0",
     "mysql2": "^2.3.0",
     "node-fetch": "^3.0.0",
