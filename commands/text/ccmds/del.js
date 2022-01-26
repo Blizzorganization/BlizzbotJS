@@ -26,6 +26,6 @@ async function run(client, message, args) {
         command: name,
         type: "ccmd",
     } });
-    message.reply({ content: `Der Befehl ${client.config.prefix}${name} und seine ${linkedAliases} zugehörigen Aliase wurdem gelöscht.` });
+    message.reply({ content: `Der Befehl ${client.config.prefix}${name} und seine ${linkedAliases} zugehörigen Aliase wurden gelöscht.` });
 }
 export { perm, run };

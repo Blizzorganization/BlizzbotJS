@@ -14,3 +14,4 @@ config.json
 
 #don't commit documentation
 zdocs/
+whitelist/
