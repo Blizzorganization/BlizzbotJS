@@ -22,7 +22,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.17.0",
     "winston": "^3.6.0",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston-daily-rotate-file": "^4.6.1"
   },
   "babel": {}
 }
