@@ -5,6 +5,14 @@ import { inspect } from "util";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
 import { loadCommands, loadEvents, permissions } from "./utils.js";
+
+/**
+ * @typedef WhitelistEntry
+ * @property {string} uuid
+ * @property {string} name
+ */
+
+
 /**
  * @param  {import("discord.js").DiscordAPIError} e
  */
@@ -94,50 +102,47 @@ class Client extends discord.Client {
     }
     async syncWhitelist() {
         const mcusers = await MCUser.findAll();
+        /** @type {WhitelistEntry[]} */
         const twitch = [];
+        /** @type {WhitelistEntry[]} */
         const youtube = [];
         mcusers.forEach((mcUser) => {
-        // @ts-ignore
             if (mcUser.get("whitelistTwitch")) {
                 twitch.push({
-                // @ts-ignore
                     uuid: mcUser.mcId,
-                    // @ts-ignore
                     name: mcUser.mcName,
                 });
             }
             if (mcUser.get("whitelistYouTube")) {
                 youtube.push({
-                    // @ts-ignore
                     uuid: mcUser.mcId,
-                    // @ts-ignore
                     name: mcUser.mcName,
                 });
             }
-            const ytlist = JSON.stringify(youtube, undefined, 2);
-            const twlist = JSON.stringify(twitch, undefined, 2);
-            if (!existsSync("whitelist")) mkdirSync("whitelist");
-            if (!existsSync("whitelist/twitch")) mkdirSync("whitelist/twitch");
-            if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
-            writeFileSync("whitelist/youtube/whitelist.json", ytlist);
-            writeFileSync("whitelist/twitch/whitelist.json", twlist);
-            const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL);
-            const twPaths = readFileSync("whitelist/twitch/paths.txt", "utf8").split(EOL);
-            for (const path of ytPaths) copyFileSync("whitelist/youtube/whitelist.json", path);
-            for (const path of twPaths) copyFileSync("whitelist/twitch/whitelist.json", path);
-            const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL);
-            const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL);
-            for (const srv in pteroYtFile) {
-                const [serverid, whitelistpath] = srv.split(" ");
-                if (!serverid || !whitelistpath) return;
-                // this.ptero.writeFile(serverid, whitelistpath, ytlist);
-            }
-            for (const srv in pteroTwFile) {
-                const [serverid, whitelistpath] = srv.split(" ");
-                if (!serverid || !whitelistpath) return;
-                // this.ptero.writeFile(serverid, whitelistpath, twlist);
-            }
         });
+        const ytlist = JSON.stringify(youtube, undefined, 2);
+        const twlist = JSON.stringify(twitch, undefined, 2);
+        if (!existsSync("whitelist")) mkdirSync("whitelist");
+        if (!existsSync("whitelist/twitch")) mkdirSync("whitelist/twitch");
+        if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
+        writeFileSync("whitelist/youtube/whitelist.json", ytlist);
+        writeFileSync("whitelist/twitch/whitelist.json", twlist);
+        const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL);
+        const twPaths = readFileSync("whitelist/twitch/paths.txt", "utf8").split(EOL);
+        for (const path of ytPaths) copyFileSync("whitelist/youtube/whitelist.json", path);
+        for (const path of twPaths) copyFileSync("whitelist/twitch/whitelist.json", path);
+        const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL);
+        const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL);
+        for (const srv in pteroYtFile) {
+            const [serverid, whitelistpath] = srv.split(" ");
+            if (!serverid || !whitelistpath) return;
+            // this.ptero.writeFile(serverid, whitelistpath, ytlist);
+        }
+        for (const srv in pteroTwFile) {
+            const [serverid, whitelistpath] = srv.split(" ");
+            if (!serverid || !whitelistpath) return;
+            // this.ptero.writeFile(serverid, whitelistpath, twlist);
+        }
     }
 }
 
