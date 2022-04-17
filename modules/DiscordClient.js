@@ -1,6 +1,7 @@
 import discord, { Collection } from "discord.js";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { EOL } from "os";
+import { join } from "path";
 import { inspect } from "util";
 import { MCUser } from "./db.js";
 import logger from "./logger.js";
@@ -127,21 +128,21 @@ class Client extends discord.Client {
         if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
         writeFileSync("whitelist/youtube/whitelist.json", ytlist);
         writeFileSync("whitelist/twitch/whitelist.json", twlist);
-        const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL);
-        const twPaths = readFileSync("whitelist/twitch/paths.txt", "utf8").split(EOL);
+        const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL).filter((path) => path !== "").map((path) => join(path, "whitelist.json"));
+        const twPaths = readFileSync("whitelist/twitch/paths.txt", "utf8").split(EOL).filter((path) => path !== "").map((path) => join(path, "whitelist.json"));
         for (const path of ytPaths) copyFileSync("whitelist/youtube/whitelist.json", path);
         for (const path of twPaths) copyFileSync("whitelist/twitch/whitelist.json", path);
-        const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL);
-        const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL);
+        const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL).filter((path) => path !== "");
+        const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL).filter((path) => path !== "");
         for (const srv in pteroYtFile) {
             const [serverid, whitelistpath] = srv.split(" ");
             if (!serverid || !whitelistpath) return;
-            // this.ptero.writeFile(serverid, whitelistpath, ytlist);
+            this.ptero.writeFile(serverid, whitelistpath, ytlist);
         }
         for (const srv in pteroTwFile) {
             const [serverid, whitelistpath] = srv.split(" ");
             if (!serverid || !whitelistpath) return;
-            // this.ptero.writeFile(serverid, whitelistpath, twlist);
+            this.ptero.writeFile(serverid, whitelistpath, twlist);
         }
     }
 }
