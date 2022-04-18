@@ -96,8 +96,8 @@ class Client extends discord.Client {
                 fullPermissions,
             });
         });
-        this.blacklist = readFileSync("badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
-        this.welcomeTexts = readFileSync("welcome.txt", "utf-8").split(EOL).filter((word) => word !== "");
+        this.blacklist = readFileSync("configs/badwords.txt", "utf-8").split(EOL).filter((word) => word !== "");
+        this.welcomeTexts = readFileSync("configs/welcome.txt", "utf-8").split(EOL).filter((word) => word !== "");
         /** @type {import("./ptero").Ptero}*/
         this.ptero = undefined;
     }
@@ -134,12 +134,12 @@ class Client extends discord.Client {
         for (const path of twPaths) copyFileSync("whitelist/twitch/whitelist.json", path);
         const pteroYtFile = readFileSync("whitelist/youtube/pterodactyl.txt", "utf8").split(EOL).filter((path) => path !== "");
         const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8").split(EOL).filter((path) => path !== "");
-        for (const srv in pteroYtFile) {
+        for (const srv of pteroYtFile) {
             const [serverid, whitelistpath] = srv.split(" ");
             if (!serverid || !whitelistpath) return;
             this.ptero.writeFile(serverid, whitelistpath, ytlist);
         }
-        for (const srv in pteroTwFile) {
+        for (const srv of pteroTwFile) {
             const [serverid, whitelistpath] = srv.split(" ");
             if (!serverid || !whitelistpath) return;
             this.ptero.writeFile(serverid, whitelistpath, twlist);

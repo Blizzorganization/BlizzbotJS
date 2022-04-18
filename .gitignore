@@ -5,12 +5,9 @@ TODO.todo
 # Ignore log files
 logs/
 
-# Ignore the blacklisted words as well as the greeting messages
-badwords.txt
-welcome.txt
-
-# Ignore the config file
-config.json
+# Ignore the config files
+configs/*
+!configs/welcome.default.txt
 
 #don't commit documentation
 zdocs/

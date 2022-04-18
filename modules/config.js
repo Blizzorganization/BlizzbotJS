@@ -50,13 +50,13 @@ const defaultConfig = {
     },
 };
 
-if (!existsSync("config.json")) {
+if (!existsSync("configs/config.json")) {
     logger.error("There is no configuration file.");
-    writeFileSync("config.json", JSON.stringify(defaultConfig, undefined, 4));
+    writeFileSync("configs/config.json", JSON.stringify(defaultConfig, undefined, 4));
     logger.info("Created a configuration file - please fill.");
     process.exit(1);
 }
-const config = JSON.parse(readFileSync("config.json", "utf8"));
+const config = JSON.parse(readFileSync("configs/config.json", "utf8"));
 
 /** @type {import("../typings/config")["blizzbot"]["discord"]}*/
 const discord = {

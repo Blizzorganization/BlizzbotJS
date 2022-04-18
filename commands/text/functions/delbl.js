@@ -13,7 +13,7 @@ async function run(client, message, args) {
     const word = args.join(" ").toLowerCase();
     if (!client.blacklist.includes(word)) return message.channel.send("Dieses Wort ist nicht in der Blacklist enthalten.");
     client.blacklist = client.blacklist.filter((blWord) => blWord !== word);
-    writeFileSync("badwords.txt", client.blacklist.join(EOL));
+    writeFileSync("configs/badwords.txt", client.blacklist.join(EOL));
     message.channel.send("Ihre Eingabe wurde von der Blacklist entfernt.");
 }
 export { perm, run };

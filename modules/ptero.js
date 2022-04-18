@@ -16,7 +16,10 @@ export class Ptero {
      */
     async writeFile(srvid, filepath, content) {
         const srv = await this.ptero.servers.fetch(srvid);
-        if (!(srv instanceof ClientServer)) return;
+        if (!(srv instanceof ClientServer)) {
+            logger.warn(`Server ${srvid} is not a client server.`);
+            return;
+        }
         logger.silly("writing file to pterodactyl server");
         srv.files.write(filepath, content);
         logger.silly("wrote file to pterodactyl server.");

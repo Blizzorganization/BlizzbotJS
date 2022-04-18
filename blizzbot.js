@@ -7,10 +7,10 @@ import logger from "./modules/logger.js";
 import { Ptero } from "./modules/ptero.js";
 
 logger.silly("ensuring the existence of a badwords.txt file");
-if (!existsSync("badwords.txt")) writeFileSync("badwords.txt", "", { encoding: "utf-8" });
+if (!existsSync("configs/badwords.txt")) writeFileSync("configs/badwords.txt", "", { encoding: "utf-8" });
 
 logger.silly("ensuring the existence of a welcome.txt file");
-if (!existsSync("welcome.txt")) copyFileSync("welcome.default.txt", "welcome.txt");
+if (!existsSync("configs/welcome.txt")) copyFileSync("configs/welcome.default.txt", "configs/welcome.txt");
 
 logger.silly("creating the discord client");
 const client = new Client(discord);
