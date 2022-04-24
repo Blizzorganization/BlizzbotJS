@@ -59,6 +59,15 @@ function handleModCommands(client, message) {
     const cmd = client.commands.get(command);
     if (cmd) {
         if (cmd.perm <= permissions.mod) return cmd.run(client, message, args);
+        if (message.author.id === message.guild.ownerId) return cmd.run(client, message, args);
+    }
+}
+function handleAdminCommands(client, message) {
+    if (!message.content.startsWith(client.config.prefix)) return false;
+    const args = message.content.split(/ +/g);
+    const command = args.shift().toLowerCase().slice(client.config.prefix.length);
+    const cmd = client.commands.get(command);
+    if (cmd) {
         if (cmd.perm <= permissions.dev && message.member.roles.cache.has(client.config.roles.dev)) return cmd.run(client, message, args);
         if (message.author.id === message.guild.ownerId) return cmd.run(client, message, args);
     }
@@ -132,7 +141,9 @@ export async function handle(client, message) {
     }
     if (client.config.channels.commands.includes(message.channelId)) return handleCommands(client, message);
 
-    if (client.config.channels.adminCommands.includes(message.channelId)) return handleModCommands(client, message);
+    if (client.config.channels.modCommands.includes(message.channelId)) return handleModCommands(client, message);
+
+    if (client.config.channels.adminCommands.includes(message.channelId)) return handleAdminCommands(client, message);
     if (!message.guild) return;
     if (message.author.bot) return;
     const [xpuser] = await XPUser.findOrCreate({

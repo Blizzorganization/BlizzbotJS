@@ -14,7 +14,7 @@ async function run(client, message) {
         logger.error("Error showing tables: " + reason);
     });
     if (!tables) return logger.log("No Tables");
-    logger.info("all tables: " + inspect(tables));
+    logger.debug(`all tables: ${inspect(tables)}`);
     const row = new MessageActionRow();
     tables.forEach((tableName) => {
         row.addComponents(

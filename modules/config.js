@@ -70,6 +70,7 @@ const discord = {
         log: config.discord.channels.log || "1234",
         clips: config.discord.channels.clips || "1234",
         commands: config.discord.channels.commands || [],
+        modCommands: config.discord.channels.modCommands || [],
         adminCommands: config.discord.channels.adminCommands || [],
         anfrage: config.discord.channels.anfrage || "1234",
         verificate: config.discord.channels.verificate || "1234",
