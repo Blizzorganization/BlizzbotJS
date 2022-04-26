@@ -14,7 +14,7 @@ async function run(client, interaction) {
     if (siteData.status == 200) {
         let previous = true;
         let initialName;
-        const jsonData = await siteData.json() || JSON.parse(siteData.text());
+        const jsonData = await siteData.json() || JSON.parse(await siteData.text());
         const [mcuser] = await MCUser.findOrCreate({ where: { discordId: interaction.member.user.id } });
         if (mcuser.get("mcName") == null) {
             previous = false;

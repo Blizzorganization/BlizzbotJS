@@ -33,6 +33,7 @@ class Client extends discord.Client {
                 discord.Intents.FLAGS.GUILD_MEMBERS,
                 discord.Intents.FLAGS.DIRECT_MESSAGES,
                 discord.Intents.FLAGS.GUILD_VOICE_STATES,
+                discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
             ],
             partials: [
                 "MESSAGE",
@@ -58,15 +59,27 @@ class Client extends discord.Client {
         this.on("warn", m => { logger.warn(m); });
         this.on("error", m => { logger.error(m); });
         this.once("ready", async () => {
+            const verificationChannel = await this.channels.fetch(config.channels.verificate, { cache: true }).catch(handleChannelFetchError);
+            if (!verificationChannel || !verificationChannel.isText()) {
+                logger.warn("The verificate channel supplied in the config file is not a text channel.");
+                return;
+            }
+            await verificationChannel.messages.fetch(config.verificationMessage);
             this.logChannel = await this.channels.fetch(config.channels.log, { cache: true }).catch(handleChannelFetchError);
-            if (!this.logChannel) return;
-            if (!this.logChannel.isText()) logger.warn("The log channel supplied in the config file is not a text channel.");
+            if (!this.logChannel || !this.logChannel.isText()) {
+                logger.warn("The log channel supplied in the config file is not a text channel.");
+                return;
+            }
             this.anfrageChannel = await this.channels.fetch(config.channels.anfrage, { cache: true }).catch(handleChannelFetchError);
-            if (!this.anfrageChannel) return logger.warn("The 'anfrage' channel supplied in the config file is not a known channel.");
-            if (!this.anfrageChannel.isText()) return logger.warn("The Anfrage channel supplied in the config file is not a text channel.");
+            if (!this.anfrageChannel || !this.anfrageChannel.isText()) {
+                logger.warn("The Anfrage channel supplied in the config file is not a text channel.");
+                return;
+            }
             this.standardChannel = await this.channels.fetch(config.channels.standard, { cache: true }).catch(handleChannelFetchError);
-            if (!this.standardChannel) return logger.warn("The 'standard' channel supplied in the config file is not a known channel.");
-            if (!this.standardChannel.isText()) return logger.warn("The 'standard' channel supplied in the config file is not a text channel.");
+            if (!this.standardChannel || !this.standardChannel.isText()) {
+                logger.warn("The 'standard' channel supplied in the config file is not a text channel.");
+                return;
+            }
             const slashGuild = await this.guilds.fetch(this.config.slashGuild).catch(() => {
                 logger.warn("received an error while trying to fetch the slashGuild.");
             });

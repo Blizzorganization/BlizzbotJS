@@ -15,6 +15,7 @@ const defaultConfig = {
             clips: "1234",
             standard: "1234",
             adminCommands: ["1234", "5678"],
+            modCommands: ["1234", "5678"],
             anfrage: "1234",
             verificate: "1234",
             voiceCategory: "1234",
@@ -66,6 +67,7 @@ const discord = {
     })(),
     slashGuild: config.discord.slashGuild || "1234",
     prefix: config.discord.prefix || "!",
+    verificationMessage:config.discord.verifymessage || "1234",
     channels: {
         log: config.discord.channels.log || "1234",
         clips: config.discord.channels.clips || "1234",

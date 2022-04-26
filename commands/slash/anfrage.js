@@ -23,7 +23,8 @@ async function run(client, interaction) {
         if (!client.anfrageChannel) client.anfrageChannel = await client.channels.fetch(client.config.channels.anfrage);
         if (!client.anfrageChannel || !client.anfrageChannel.isText()) {
             logger.info("Anfrage: " + m.author.tag + ": " + m.content);
-            return logger.error("Der Anfrage Kanal ist kein Textkanal.");
+            logger.error("Der Anfrage Kanal ist kein Textkanal.");
+            return;
         }
         if (m.content) {
             client.anfrageChannel.send(`${m.author.tag}: ${m.content}`);

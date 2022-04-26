@@ -35,11 +35,15 @@ async function checkWhitelist(client, message) {
     members.forEach((member) => {
         MCUser.upsert({
             discordId: member.id,
-            ytWhitelisted: member.roles.cache.hasAny(ytroles),
-            twWhitelisted: member.roles.cache.hasAny(twroles),
+            ytWhitelisted: member.roles.cache.hasAny(...ytroles),
+            twWhitelisted: member.roles.cache.hasAny(...twroles),
         }, {});
     });
 }
+/**
+ * @param {import("events").EventEmitter} listener
+ * @param {import("fs").PathLike} directory
+ */
 async function loadEvents(listener, directory) {
     const eventFiles = readdirSync(directory);
     eventFiles.forEach(async (file) => {

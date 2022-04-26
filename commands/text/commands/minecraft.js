@@ -11,7 +11,7 @@ const perm = permissions.user;
 async function run(client, message, args) {
     if (!args || !args[0]) {
         const msg = await message.channel.send("Bitte Minecraftname eingeben");
-        const coll = msg.channel.createMessageCollector((m => m.author.id == message.author.id));
+        const coll = msg.channel.createMessageCollector({ filter: (m => m.author.id == message.author.id) });
         coll.on("collect", (m) => {
             coll.stop();
             if (m.content.startsWith(`${client.config.prefix}`)) return;
@@ -32,7 +32,7 @@ async function handle(client, message, args) {
     if (siteData.status == 200) {
         let previous = true;
         let initialName;
-        const jsonData = await siteData.json() || JSON.parse(siteData.text());
+        const jsonData = await siteData.json() || JSON.parse(await siteData.text());
         const [mcuser] = await MCUser.findOrCreate({ where: { discordId: message.author.id } });
         if (mcuser.get("mcName") == null) {
             previous = false;

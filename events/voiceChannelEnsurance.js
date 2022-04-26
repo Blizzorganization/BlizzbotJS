@@ -93,7 +93,7 @@ export {
     disabled,
 };
 /**
- * @param  {import("../modules/DiscordClient")} client
+ * @param  {import("../modules/DiscordClient").default} client
  * @param  {import("discord.js").VoiceState} member
  * @param  {number} num
  */

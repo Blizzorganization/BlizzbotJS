@@ -27,6 +27,10 @@ class MCUser extends Model {}
 class CustomCommand extends Model {}
 class Alias extends Model {}
 
+/**
+ *
+ * @param {import("../typings/config")["blizzbot"]["database"]} config
+ */
 async function init(config) {
     db = new Sequelize({
         database: config.database,

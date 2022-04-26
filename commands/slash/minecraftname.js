@@ -8,7 +8,7 @@ const perm = permissions.user;
  * @param  {import("../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").CommandInteraction} interaction
  */
-async function run(_client, interaction) {
+async function run(client, interaction) {
     const user = interaction.options.getUser("user") || interaction.member.user;
     const mcUser = await MCUser.findByPk(user.id);
     if (!mcUser || !mcUser.get("mcId")) return interaction.reply({ content: "Dein Minecraft Name konnte nicht gefunden werden." });

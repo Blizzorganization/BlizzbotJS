@@ -5,8 +5,13 @@ const { PteroClient, ClientServer } = pkg;
 
 export class Ptero {
     ptero;
+    /**
+     *
+     * @param {import("../typings/config")["blizzbot"]["pterodactyl"]} config
+     */
     constructor(config) {
-        this.ptero = new PteroClient(config.host, config.apiKey, { fetchServers: true, cacheServers: true });
+        // @ts-ignore
+        this.ptero = new PteroClient(config.host, config.apiKey, { servers: { fetch: true, cache: true } });
         this.ptero.connect();
     }
     /**

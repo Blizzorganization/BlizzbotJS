@@ -132,10 +132,12 @@ export async function handle(client, message) {
     logger.silly("message was clean.");
     if (Math.random() > 0.999) message.react(client.config.emojis.randomReaction);
     logger.silly("checking for verification");
-    if (message.channelId === client.config.channels.verificate && message.content.toLowerCase() === `${client.config.prefix}zz`) {
-        logger.silly("verifying user..");
-        message.member.roles.add(client.config.roles.verify);
-        verify(client, message.author.username);
+    if (message.channelId === client.config.channels.verificate) {
+        if (message.content.toLowerCase() === `${client.config.prefix}zz`) {
+            logger.silly("verifying user..");
+            message.member.roles.add(client.config.roles.verify);
+            verify(client, message.author.username);
+        }
         if (message.deletable) message.delete();
         return;
     }
@@ -153,8 +155,8 @@ export async function handle(client, message) {
         },
         defaults: {
             experience: 0,
-            available:  true,
-            username:   message.author.username,
+            available: true,
+            username: message.author.username,
         },
     });
     if (xpuser.username !== message.author.username) await xpuser.update({ username: message.author.username });

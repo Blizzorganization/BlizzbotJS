@@ -4,6 +4,7 @@ declare module blizzbot {
     export const discord: {
         token: string
         prefix: string
+        verificationMessage: Snowflake
         slashGuild: Snowflake
         channels: {
             log: Snowflake
@@ -11,6 +12,7 @@ declare module blizzbot {
             clips: Snowflake
             standard: Snowflake
             adminCommands: Snowflake[]
+            modCommands: Snowflake[]
             anfrage: Snowflake
             verificate: Snowflake
             voiceCategory: Snowflake
@@ -38,7 +40,7 @@ declare module blizzbot {
         user: string
         database: string
         password: string
-        type: string
+        type: "mysql"|"postgres"
     }
     export const pterodactyl: {
         host: string

@@ -6,7 +6,6 @@ const perm = permissions.mod;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
- * @param  {string[]} args
  */
 async function run(client, message) {
     const cmds = await CustomCommand.findAll();
