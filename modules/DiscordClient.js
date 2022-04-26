@@ -1,5 +1,5 @@
 import discord, { Collection } from "discord.js";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "fs";
 import { EOL } from "os";
 import { join } from "path";
 import { inspect } from "util";
@@ -123,9 +123,14 @@ class Client extends discord.Client {
         });
         const ytlist = JSON.stringify(youtube, undefined, 2);
         const twlist = JSON.stringify(twitch, undefined, 2);
+
+        // create whitelistfolder and txt files
         if (!existsSync("whitelist")) mkdirSync("whitelist");
         if (!existsSync("whitelist/twitch")) mkdirSync("whitelist/twitch");
         if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
+        ["paths", "pterodactyl"].forEach((txtFile) => appendFileSync(`whitelist/youtube/${txtFile}.txt`, ""));
+        ["paths", "pterodactyl"].forEach((txtFile) => appendFileSync(`whitelist/twitch/${txtFile}.txt`, ""));
+
         writeFileSync("whitelist/youtube/whitelist.json", ytlist);
         writeFileSync("whitelist/twitch/whitelist.json", twlist);
         const ytPaths = readFileSync("whitelist/youtube/paths.txt", "utf8").split(EOL).filter((path) => path !== "").map((path) => join(path, "whitelist.json"));
