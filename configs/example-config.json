@@ -1,0 +1,56 @@
+{
+    "discord": {
+      "token": "Discordtoken",
+      "prefix": "!",
+      "verifymessage": "ID from verifymessage",
+      "channels": {
+        "log": "ID from logchannel",
+        "commands": [
+          "ID from commandchannel"
+        ],
+        "modCommands": [
+          "ID from modchannel"
+        ],
+        "adminCommands": [
+          "ID from adminchannel"
+        ],
+        "clips": "ID from Clip-Channel",
+        "standard": "ID from all-Channel",
+        "anfrage": "ID from anfrage-Channel",
+        "verificate": "ID from verify-Channel",
+        "voiceCategory": "ID from Clip-Category",
+        "textVoiceCategory": "ID from Clip-Category"
+      },
+      "slashGuild": "DiscordServerID",
+      "roles": {
+        "whitelist": {
+          "youtube": ["RoleID"],
+          "twitch": ["RoleID"]
+        },
+        "noFilter": [
+          "123"
+        ],
+        "verify": "RoleID",
+        "mute": "RoleID",
+        "dev": "RoleID",
+        "mod": "RoleID"
+      },
+      "emojis": {
+        "left": "ID from emote",
+        "right": "ID from emote",
+        "randomReaction": "Id from randomemote"
+      }
+    },
+    "database": {
+      "host": "localhost",
+      "port": "port",
+      "user": "MySQL Database User",
+      "database": "Database Name",
+      "password": "MySQL Database Password",
+      "type": "postgres"
+    },
+    "pterodactyl": {
+      "host": "host from Panel",
+      "apiKey": "Api Key"
+    }
+  }

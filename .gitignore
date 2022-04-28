@@ -8,6 +8,7 @@ logs/
 # Ignore the config files
 configs/*
 !configs/welcome.default.txt
+!configs/example-config.json
 
 #don't commit documentation
 zdocs/
