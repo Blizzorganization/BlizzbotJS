@@ -9,10 +9,10 @@ declare module blizzbot {
         channels: {
             log: Snowflake
             commands: Snowflake[]
+            modCommands: Snowflake[]
+            adminCommands: Snowflake[]
             clips: Snowflake
             standard: Snowflake
-            adminCommands: Snowflake[]
-            modCommands: Snowflake[]
             anfrage: Snowflake
             verificate: Snowflake
             voiceCategory: Snowflake

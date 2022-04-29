@@ -3,7 +3,7 @@ import { inspect } from "util";
 import { db } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
-const perm = permissions.dev;
+const perm = permissions.mod;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").Message} message
