@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { GuildMember, StageChannel } from "discord.js";
-import { permissions } from "../../modules/utils.js";
+import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").CommandInteraction} interaction
  */
 async function run(client, interaction) {

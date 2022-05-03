@@ -1,11 +1,11 @@
 import { SlashCommandBuilder, SlashCommandIntegerOption } from "@discordjs/builders";
 import { MessageEmbed } from "discord.js";
-import { XPUser } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { XPUser } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.user;
 /**
-* @param  {import("../../modules/DiscordClient.js").default} client
+* @param  {import("../../../modules/DiscordClient.js").default} client
 * @param  {import("discord.js").CommandInteraction} interaction
 */
 async function run(client, interaction) {

@@ -1,11 +1,11 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
 import fetch from "node-fetch";
-import { MCUser } from "../../modules/db.js";
-import { permissions } from "../../modules/utils.js";
+import { MCUser } from "../../../modules/db.js";
+import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.user;
 /**
- * @param  {import("../../modules/DiscordClient.js").default} client
+ * @param  {import("../../../modules/DiscordClient.js").default} client
  * @param  {import("discord.js").CommandInteraction} interaction
  */
 async function run(client, interaction) {

@@ -53,7 +53,9 @@ class Client extends discord.Client {
         loadCommands("commands/text/commands", this.commands);
         loadCommands("commands/text/functions", this.commands);
         loadCommands("commands/text/ccmds", this.commands);
-        loadCommands("commands/slash", this.slashCommands);
+        loadCommands("commands/slash/user", this.slashCommands);
+        loadCommands("commands/slash/moderation", this.slashCommands);
+        loadCommands("commands/slash/dev", this.slashCommands);
         loadEvents(this, "events");
         if (process.env.DEBUG === "2") this.on("debug", m => { logger.debug(m); });
         this.on("warn", m => { logger.warn(m); });
