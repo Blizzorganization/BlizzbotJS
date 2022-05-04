@@ -1,7 +1,9 @@
-import { SlashCommandBuilder, SlashCommandUserOption } from "@discordjs/builders";
+import { SlashCommandBuilder } from "@discordjs/builders";
 import { MessageEmbed } from "discord.js";
 import { MCUser } from "../../../modules/db.js";
+import logger from "../../../modules/logger.js";
 import { permissions } from "../../../modules/utils.js";
+import { inspect } from "node:util";
 
 const perm = permissions.user;
 /**
@@ -9,8 +11,10 @@ const perm = permissions.user;
  * @param  {import("discord.js").CommandInteraction} interaction
  */
 async function run(client, interaction) {
-    const user = interaction.options.getUser("user") || interaction.member.user;
-    const mcUser = await MCUser.findByPk(user.id);
+    const user = interaction.options.getUser("user") || interaction.user;
+    logger.debug(`commands/slash/user/minecraftname: userId = ${user.id}`);
+    const mcUser = await MCUser.findOne({ where: { discordId: user.id } });
+    logger.debug(inspect(mcUser));
     if (!mcUser || !mcUser.get("mcId")) return interaction.reply({ content: "Dein Minecraft Name konnte nicht gefunden werden." });
     const embed = new MessageEmbed()
         .setTitle(user.username)
@@ -21,13 +25,14 @@ async function run(client, interaction) {
 }
 
 const setup = new SlashCommandBuilder()
-    .addUserOption(
-        new SlashCommandUserOption()
-            .setName("user")
-            .setDescription("Der Nutzer, dessen Minecraft Namen du wissen möchtest")
-            .setRequired(false),
+    .addUserOption((option) => option
+        .setName("user")
+        .setDescription("The user you want the minecraft name from")
+        .setDescriptionLocalization("de", "Der Nutzer, dessen Minecraft Namen du wissen möchtest")
+        .setRequired(false),
     )
     .setName("minecraftname")
-    .setDescription("Frage einen Minecraft Namen ab").toJSON();
+    .setDescription("Request the Minecraft name of a user")
+    .setDescriptionLocalization("de", "Frage einen Minecraft Namen ab").toJSON();
 
 export { perm, run, setup };

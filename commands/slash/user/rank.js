@@ -47,9 +47,11 @@ const setup = new SlashCommandBuilder()
         new SlashCommandUserOption()
             .setName("user")
             .setRequired(false)
-            .setDescription("Wessen Rang möchtest du wissen?"),
+            .setDescriptionLocalization("de", "Der Nutzer, dessen Rang du wissen möchtest")
+            .setDescription("The user you want to get the rank for"),
     )
     .setName("rank")
-    .setDescription("Frage den Rang eines Nutzers ab").toJSON();
+    .setDescription("Check a user's rank")
+    .setDescriptionLocalization("de", "Frage den Rang eines Nutzers ab").toJSON();
 
 export { perm, run, setup };

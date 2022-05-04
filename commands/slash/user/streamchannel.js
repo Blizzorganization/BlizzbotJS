@@ -31,6 +31,7 @@ async function run(client, interaction) {
 
 const setup = new SlashCommandBuilder()
     .setName("streamchannel")
-    .setDescription("Erzeuge einen Stream-Channel").toJSON();
+    .setDescription("Create a Stream-Channel")
+    .setDescriptionLocalization("de", "Erzeuge einen Stream-Channel").toJSON();
 
 export { perm, run, setup };

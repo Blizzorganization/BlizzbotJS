@@ -1,14 +1,14 @@
-import { MessageEmbed } from "discord.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
 import { CustomCommand } from "../../../modules/db.js";
+import { MessageEmbed } from "discord.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.user;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").Message} message
- * @param  {string[]} args
+ * @param  {import("discord.js").CommandInteraction} interaction
  */
-async function run(client, message) {
+async function run(client, interaction) {
     const embed = new MessageEmbed()
         .setThumbnail(client.user.avatarURL({ format: "png" }))
         .setTitle("**__Der Bot kann folgende Befehle:__**")
@@ -20,7 +20,11 @@ async function run(client, message) {
 
     const ccmds = (await CustomCommand.findAll()).map((c) => `${client.config.prefix}${c.commandName}`);
     if (ccmds.length > 0) embed.addField("**__Temporäre Befehle:__**", ccmds.join(", "));
-
-    message.channel.send({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
 }
-export { perm, run };
+const setup = new SlashCommandBuilder()
+    .setName("help")
+    .setDescription("Shows the currently existing commands")
+    .setDescriptionLocalization("de", "Zeigt die Hilfe an welche Befehle derzeit exestieren").toJSON();
+
+export { perm, run, setup };

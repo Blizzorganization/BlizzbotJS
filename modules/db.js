@@ -50,7 +50,7 @@ async function init(config) {
     }, {
         sequelize: db,
         tableName: "ranking",
-        paranoid: true,
+        paranoid: false,
     });
     MCUser.init({
         discordId: {
@@ -70,7 +70,7 @@ async function init(config) {
     }, {
         sequelize: db,
         tableName: "mcnames",
-        paranoid: true,
+        paranoid: false,
     });
     CustomCommand.init({
         commandName: DataTypes.TEXT,
@@ -78,7 +78,7 @@ async function init(config) {
         lastEditedBy: DataTypes.BIGINT,
     }, {
         sequelize: db,
-        paranoid: true,
+        paranoid: false,
     });
     Alias.init({
         command: DataTypes.TEXT,
@@ -86,7 +86,7 @@ async function init(config) {
         type: DataTypes.TEXT,
     }, {
         sequelize: db,
-        paranoid: true,
+        paranoid: false,
     });
     await db.authenticate().catch((e) => {logger.error(e);});
 

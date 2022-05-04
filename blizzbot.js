@@ -20,6 +20,7 @@ logger.silly("creating the pterodactyl client");
 client.ptero = new Ptero(pterodactyl);
 logger.info("Discord Client logging in.");
 client.login(discord.token);
+const r = repl.start("> ");
 async function stop() {
     logger.info("Shutting down, please wait.");
     const stopping = [];
@@ -30,7 +31,6 @@ async function stop() {
     logger.close();
     process.exit(0);
 }
-const r = repl.start("> ");
 process.on("SIGINT", async () => {
     await stop();
 });

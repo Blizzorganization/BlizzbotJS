@@ -29,25 +29,30 @@ async function run(client, interaction) {
     interaction.reply({ content: `Der Nutzer ${user.user.username} wurde getimeoutet.`, ephemeral: true });
 }
 const setup = new SlashCommandBuilder()
+    .setDefaultPermission(false)
     .setName("timeout")
     .addUserOption(
         new SlashCommandUserOption()
-            .setDescription("Der Nutzer, den du timeouten möchtest")
+            .setDescriptionLocalization("de", "Der Nutzer, den du timeouten möchtest")
+            .setDescription("The user you want to timeout")
             .setName("user")
             .setRequired(true),
     )
     .addStringOption(
         new SlashCommandStringOption()
             .setName("time")
-            .setDescription("Wie lange der Nutzer getimeoutet werden soll (Format dd:hh:mm:ss)")
+            .setDescription("how long the user shall be timeouted (format dd:hh:mm:ss)")
+            .setDescriptionLocalization("de", "Wie lange der Nutzer getimeoutet werden soll (Format dd:hh:mm:ss)")
             .setRequired(true),
     )
     .addStringOption(
         new SlashCommandStringOption()
             .setName("reason")
-            .setDescription("Grund für den Timeout")
+            .setDescription("Reason for the timeout")
+            .setDescriptionLocalization("de", "Grund für den Timeout")
             .setRequired(false),
     )
-    .setDescription("Timeoute einen Nutzer").toJSON();
+    .setDescription("Timeout a user")
+    .setDescriptionLocalization("de", "Timeoute einen Nutzer").toJSON();
 
 export { perm, run, setup };

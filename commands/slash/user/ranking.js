@@ -16,7 +16,7 @@ async function run(client, interaction) {
         },
         order: [["experience", "DESC"]],
         limit: 10,
-        offset: 10 * ((interaction.options.getInteger("seite") || 1) - 1),
+        offset: 10 * ((interaction.options.getInteger("page") || 1) - 1),
     });
     const embeds = [];
     for (const user of ranking) {
@@ -42,11 +42,14 @@ async function run(client, interaction) {
 const setup = new SlashCommandBuilder()
     .addIntegerOption(
         new SlashCommandIntegerOption()
-            .setName("seite")
-            .setDescription("Welche Seite möchtest du dir anzeigen lassen?")
+            .setName("page")
+            .setNameLocalization("de", "seite")
+            .setDescription("The page to show")
+            .setDescriptionLocalization("de", "Die Seite, die dir angezeigt werden soll")
             .setRequired(false),
     )
     .setName("ranking")
-    .setDescription("Zeigt die Rangliste der Erfahrung").toJSON();
+    .setDescription("Shows the current experience ranking")
+    .setDescriptionLocalization("de", "Zeigt die Rangliste der Erfahrung").toJSON();
 
 export { perm, run, setup };

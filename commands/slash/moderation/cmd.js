@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "@discordjs/builders";
 import { Util } from "discord.js";
 import { CustomCommand } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
@@ -15,4 +16,10 @@ async function run(client, message) {
         await message.reply({ content });
     }
 }
-export { perm, run };
+const setup = new SlashCommandBuilder()
+    .setDefaultPermission(false)
+    .setName("cmd")
+    .setDescription("Shows the existing Customcommands")
+    .setDescriptionLocalization("de", "Zeigt die alle Customcommands an").toJSON();
+
+export { perm, run, setup };

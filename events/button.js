@@ -27,7 +27,7 @@ export async function handle(client, interaction) {
                         offset: position - 1,
                         attributes: [
                             sequelize.literal("distinct on(experience) 1"),
-                        ].concat(Object.keys(XPUser.rawAttributes)),
+                        ].concat(Object.keys(XPUser.getAttributes())),
                     });
                     const newEmbed = new MessageEmbed(embed);
                     if (next !== null) {
