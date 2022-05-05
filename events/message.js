@@ -128,6 +128,8 @@ export async function handle(client, message) {
     logger.silly("message exists");
     if (message.partial) message = await message.fetch();
     logger.silly("fetched possible partial message");
+    // ignore webhooks
+    if (message.author.discriminator === "0000") return;
     if (checkMessage(client, message)) return;
     logger.silly("message was clean.");
     if (Math.random() > 0.999) message.react(client.config.emojis.randomReaction);
