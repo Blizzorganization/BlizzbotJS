@@ -1,6 +1,6 @@
 {
   "name": "blizzbotjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Discord Bot for Blizzor",
   "main": "blizzbot.js",
   "type": "module",

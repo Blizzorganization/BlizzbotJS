@@ -13,10 +13,11 @@ async function run(client, interaction) {
         .setThumbnail(client.user.avatarURL({ format: "png" }))
         .setTitle("**__Der Bot kann folgende Befehle:__**")
         .setColor(0xedbc5d)
-        .addField(`${client.config.prefix}mc [Name]`, "Registriere deinen Minecraft-Account")
-        .addField(`${client.config.prefix}mcname [Name]`, "Gibt deinen aktuellen Minecraft-Account wieder")
-        .addField(`${client.config.prefix}rank [Name]`, "Gibt Erfahrung wieder")
-        .addField(`${client.config.prefix}anfrage`, "Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden");
+        .addField("/minecraft [Name]", "Registriere deinen Minecraft-Account")
+        .addField("/minecraftname [Name]", "Gibt deinen aktuellen Minecraft-Account wieder")
+        .addField("/rank [Name]", "Gibt Erfahrung wieder")
+        .addField("/ranking [Name]", "Zeigt die Aktuelle Rangliste an")
+        .addField("/anfrage", "Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden");
 
     const ccmds = (await CustomCommand.findAll()).map((c) => `${client.config.prefix}${c.commandName}`);
     if (ccmds.length > 0) embed.addField("**__Temporäre Befehle:__**", ccmds.join(", "));
