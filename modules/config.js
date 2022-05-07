@@ -8,10 +8,8 @@ const defaultConfig = {
         slashGuild: "1234",
         channels: {
             log: "1234",
-            commands: [
-                "1234",
-                "5678",
-            ],
+            commands: ["1234", "5678"],
+            ignore: ["1234", "5678"],
             clips: "1234",
             standard: "1234",
             adminCommands: ["1234", "5678"],
@@ -67,7 +65,7 @@ const discord = {
     })(),
     slashGuild: config.discord.slashGuild || "1234",
     prefix: config.discord.prefix || "!",
-    verificationMessage:config.discord.verifymessage || "1234",
+    verificationMessage: config.discord.verifymessage || "1234",
     channels: {
         log: config.discord.channels.log || "1234",
         clips: config.discord.channels.clips || "1234",
@@ -75,6 +73,7 @@ const discord = {
         modCommands: config.discord.channels.modCommands || [],
         adminCommands: config.discord.channels.adminCommands || [],
         anfrage: config.discord.channels.anfrage || "1234",
+        ignore: config.discord.channels.ignore || [],
         verificate: config.discord.channels.verificate || "1234",
         standard: config.discord.channels.standard || "1234",
         voiceCategory: config.discord.channels.voiceCategory || "1234",
@@ -83,7 +82,7 @@ const discord = {
     roles: {
         whitelist: {
             youtube: config.discord.roles.whitelist.youtube || [],
-            twitch:  config.discord.roles.whitelist.twitch || [],
+            twitch: config.discord.roles.whitelist.twitch || [],
         },
         noFilter: config.discord.roles.noFilter || [],
         verify: config.discord.roles.verify || "1234",

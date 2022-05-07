@@ -130,6 +130,7 @@ export async function handle(client, message) {
     logger.silly("fetched possible partial message");
     // ignore webhooks
     if (message.author.discriminator === "0000") return;
+    if (client.config.channels.ignore.includes(message.channelId)) return;
     if (checkMessage(client, message)) return;
     logger.silly("message was clean.");
     if (Math.random() > 0.999) message.react(client.config.emojis.randomReaction);
@@ -150,6 +151,13 @@ export async function handle(client, message) {
     if (client.config.channels.adminCommands.includes(message.channelId)) return handleAdminCommands(client, message);
     if (!message.guild) return;
     if (message.author.bot) return;
+    calculateExperience(message);
+}
+/**
+ *
+ * @param {import("discord.js").Message} message
+ */
+async function calculateExperience(message) {
     const [xpuser] = await XPUser.findOrCreate({
         where: {
             discordId: message.author.id,

@@ -11,6 +11,7 @@ declare module blizzbot {
             commands: Snowflake[]
             modCommands: Snowflake[]
             adminCommands: Snowflake[]
+            ignore: Snowflake[]
             clips: Snowflake
             standard: Snowflake
             anfrage: Snowflake
