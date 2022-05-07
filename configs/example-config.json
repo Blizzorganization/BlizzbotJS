@@ -15,6 +15,7 @@
           "ID from adminchannel"
         ],
         "clips": "ID from Clip-Channel",
+        "ignore": ["Id of an ignored channel"],
         "standard": "ID from all-Channel",
         "anfrage": "ID from anfrage-Channel",
         "verificate": "ID from verify-Channel",
