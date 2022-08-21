@@ -10,6 +10,7 @@ const name = "messageDelete";
  */
 async function handle(client, message) {
     if (!message.guild) return;
+    if (message.channelId == client.config.channels.verificate) return;
     const embed = new MessageEmbed()
         .setTitle("Gelöschte Nachricht")
         .setColor(0xedbc5d)
