@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { Util } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { inspect } from "util";
 import { db } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
@@ -7,27 +6,27 @@ import { permissions } from "../../../modules/utils.js";
 const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const sql = interaction.options.getString("sql", true);
     let replied = false;
     const data = await db.query(sql)
         .catch(async (reason) => {
-            for (const reasonPart of Util.splitMessage(`Deine Anfrage ergab einen Fehler: ${inspect(reason)}`)) {
+            for (const reasonPart of splitMessage(`Deine Anfrage ergab einen Fehler: ${inspect(reason)}`)) {
                 if (!replied) {
                     await interaction.reply(reasonPart);
                     replied = true;
-                } else { await interaction.channel.send(reasonPart); }
+                } else { await interaction.channel?.send(reasonPart); }
             }
         });
     if (data) {
         const [result] = data;
-        for (const resultPart of Util.splitMessage(`\`\`\`js\n${inspect(result)}\`\`\``, { append: "```", prepend: "```js\n", char: "\n" })) {
+        for (const resultPart of splitMessage(`\`\`\`js\n${inspect(result)}\`\`\``, { append: "```", prepend: "```js\n", char: "\n" })) {
             if (!replied) {
                 await interaction.reply(resultPart);
                 replied = true;
-            } else { await interaction.channel.send(resultPart); }
+            } else { await interaction.channel?.send(resultPart); }
         }
     }
 }

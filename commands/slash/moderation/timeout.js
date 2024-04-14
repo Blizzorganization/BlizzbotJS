@@ -1,11 +1,11 @@
-import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandUserOption } from "discord.js";
 import { GuildMember } from "discord.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.mod;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     let user = interaction.options.getMember("user", true);
@@ -25,7 +25,7 @@ async function run(client, interaction) {
     timeout *= 60;
     if (!isNaN(seconds)) timeout += seconds;
     timeout *= 1000;
-    await user.timeout(timeout, reason);
+    await user?.timeout(timeout, reason);
     interaction.reply({ content: `Der Nutzer ${user.user.username} wurde getimeoutet.`, ephemeral: true });
 }
 const setup = new SlashCommandBuilder()

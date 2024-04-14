@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "../../../modules/db.js";
 import { MessageEmbed } from "discord.js";
 import { permissions } from "../../../modules/utils.js";
@@ -6,7 +6,7 @@ import { permissions } from "../../../modules/utils.js";
 const perm = permissions.user;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const embed = new MessageEmbed()

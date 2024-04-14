@@ -1,9 +1,9 @@
-import { writeFileSync } from "fs";
-import { EOL } from "os";
+import { writeFileSync } from "node:fs";
+import { EOL } from "node:os";
 
 /**
  * @param  {import("../../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 export async function addBLWord(client, interaction) {
     const word = interaction.options.getString("word", true).toLowerCase();

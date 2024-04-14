@@ -1,17 +1,17 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { ChannelType, SlashCommandBuilder } from "discord.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const text = interaction.options.getString("message", true);
     let channel = interaction.options.getChannel("channel", false);
     if (!channel) channel = await client.channels.fetch(client.config.channels.standard);
-    if (!(channel.isText())) return interaction.reply("Der in der Config angegebene Kanal ist kein Textkanal.");
-    await channel.send(text);
+    if (channel?.type !== ChannelType.GuildText) return interaction.reply("Der in der Config angegebene Kanal ist kein Textkanal.");
+    await channel?.send(text);
     await interaction.deferReply();
 }
 const setup = new SlashCommandBuilder()

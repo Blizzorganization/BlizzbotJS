@@ -1,11 +1,11 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { MCUser, XPUser } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const user = interaction.options.getUser("name", true);

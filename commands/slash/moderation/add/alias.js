@@ -2,7 +2,7 @@ import { Alias } from "../../../../modules/db.js";
 
 /**
  * @param  {import("../../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  * @param  {"command"|"customcommand"} type
  */
 export async function addAlias(client, interaction, type) {

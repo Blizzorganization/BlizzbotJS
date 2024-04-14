@@ -1,3 +1,4 @@
+// @ts-check
 import { copyFileSync, existsSync, writeFileSync } from "fs";
 import repl from "repl";
 import { database, discord, pterodactyl } from "./modules/config.js";

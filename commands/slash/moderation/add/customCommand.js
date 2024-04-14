@@ -3,7 +3,7 @@ import logger from "../../../../modules/logger.js";
 
 /**
  * @param  {import("../../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 export async function addCustomCommand(client, interaction) {
     let name = interaction.options.getString("name", true).toLowerCase();

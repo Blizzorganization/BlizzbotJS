@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 export const perm = permissions.mod;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 export async function run(client, interaction) {
     const commandName = interaction.options.getString("command", true).toLowerCase();

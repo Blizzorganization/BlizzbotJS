@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, SlashCommandUserOption } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandUserOption } from "discord.js";
 import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { XPUser } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
@@ -6,7 +6,7 @@ import { permissions } from "../../../modules/utils.js";
 const perm = permissions.user;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const user = interaction.options.getUser("user") || interaction.member.user;

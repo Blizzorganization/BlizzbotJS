@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { Util } from "discord.js";
 import { CustomCommand } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";

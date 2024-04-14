@@ -1,17 +1,17 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { XPUser } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.dev;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const user = interaction.options.getUser("user", true);
     const xpuser = await XPUser.findOne({ where: { discordId: user.id, guildId: interaction.guildId } });
-    await xpuser.update({ experience: 0 });
-    await xpuser.save();
+    await xpuser?.update({ experience: 0 });
+    await xpuser?.save();
     await interaction.reply(interaction.locale === "de" ? "Der Rang dieses Nutzers wurde zurückgesetzt." : "The user's rank has been reset.");
 }
 const setup = new SlashCommandBuilder()

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import logger from "../../../modules/logger.js";
 import { permissions } from "../../../modules/utils.js";
 import { deleteAlias } from "./delete/alias.js";
@@ -8,7 +8,7 @@ import { deleteCustomCommand } from "./delete/customCommand.js";
 export const perm = permissions.mod;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 export async function run(client, interaction) {
     const subCommand = interaction.options.getSubcommand();

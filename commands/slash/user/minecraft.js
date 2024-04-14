@@ -1,12 +1,11 @@
-import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import fetch from "node-fetch";
+import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { MCUser } from "../../../modules/db.js";
 import { permissions } from "../../../modules/utils.js";
 
 const perm = permissions.user;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
     const name = interaction.options.getString("name");

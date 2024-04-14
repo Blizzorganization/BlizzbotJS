@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { User } from "discord.js";
 import logger from "../../../modules/logger.js";
 import { permissions } from "../../../modules/utils.js";
@@ -6,10 +6,10 @@ import { permissions } from "../../../modules/utils.js";
 const perm = permissions.user;
 /**
  * @param  {import("../../../modules/DiscordClient.js").default} client
- * @param  {import("discord.js").CommandInteraction} interaction
+ * @param  {import("discord.js").ChatInputCommandInteraction} interaction
  */
 async function run(client, interaction) {
-    let user = interaction.member.user;
+    let user = interaction.member?.user;
     if (!(user instanceof User)) user = await client.users.fetch(user.id);
     const msg = await user.send("Bitte schreiben Sie mir Ihre Anfrage in einer Nachricht:").catch(async (reason) => {
         await interaction.reply(`Beim Senden der Nachricht ist ein Fehler aufgetreten: ${reason.toString()}`);
