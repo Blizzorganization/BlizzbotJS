@@ -1,6 +1,7 @@
 import { Console } from "node:console";
 import { existsSync, readdirSync } from "node:fs";
 import { PassThrough } from "node:stream";
+import { URL } from "node:url";
 import { mcnames } from "$/db/mcnames";
 import type { Collection, Message, User } from "discord.js";
 import { sql } from "drizzle-orm";
@@ -12,26 +13,30 @@ import { db } from "./db";
 import logger from "./logger";
 
 /**
- * @param path the command directory
+ * @param commandDir the command directory
  * @param commandMap the map to store */
 async function loadCommands(
-  path: string,
+  commandDir: URL,
   commandMap: Collection<string, Command>,
 ) {
-  if (!existsSync(path))
-    throw new Error(`The given command directory ${path} does not exist.`);
-  const commandFiles = readdirSync(path);
+  if (!existsSync(commandDir))
+    throw new Error(
+      `The given command directory ${commandDir} does not exist.`,
+    );
+  const commandFiles = readdirSync(commandDir);
   for (const fileName of commandFiles) {
+    const commandURL = new URL(fileName, commandDir);
+    const path = Bun.fileURLToPath(commandURL.href);
     if (!(fileName.endsWith(".js") || fileName.endsWith(".ts"))) {
       logger.error(
-        `${path}/${fileName} is not a javascript or typescript file and does not belong in the event directory`,
+        `${path} is not a javascript or typescript file and does not belong in the event directory`,
       );
       continue;
     }
-    logger.silly(`reading command file at ${path}/${fileName}`);
-    const cmd = (await import(`${path}/${fileName}`)).default as unknown;
+    logger.silly(`reading command file at ${commandDir}/${fileName}`);
+    const cmd = (await import(path)).default as unknown;
     if (!cmd || !(cmd instanceof Command)) {
-      logger.warn(`File ${path}/${fileName} is not a Command.`);
+      logger.warn(`File ${path} is not a Command.`);
       continue;
     }
     const name = fileName.split(".")[0];
@@ -41,7 +46,7 @@ async function loadCommands(
     }
     if (name !== cmd.name) {
       logger.error(
-        `Command ${cmd.name} does not match path ${path}/${fileName} and will not be loaded.`,
+        `Command ${cmd.name} does not match path ${path} and will not be loaded.`,
       );
       continue;
     }
@@ -76,19 +81,21 @@ async function checkWhitelist(_client: DiscordClient, message: Message) {
     });
 }
 
-async function loadEvents(listener: DiscordClient, directory: string) {
+async function loadEvents(listener: DiscordClient, directory: URL) {
   const eventFiles = readdirSync(directory);
   for (const file of eventFiles) {
+    const eventURL = new URL(file, directory);
+    const path = Bun.fileURLToPath(eventURL.href);
     if (!(file.endsWith(".js") || file.endsWith(".ts"))) {
       logger.warn(
-        `${directory}/${file} is not a javascript or typescript file and does not belong in the event directory`,
+        `${path} is not a javascript or typescript file and does not belong in the event directory`,
       );
       continue;
     }
-    const event = (await import(`../${directory}/${file}`)).default;
+    const event = (await import(path)).default;
     if (!event || !(event instanceof EventListener)) continue;
     if (event.disabled) {
-      logger.info(`Event ${directory}/${file} is disabled.`);
+      logger.info(`Event ${path} is disabled.`);
       continue;
     }
     (event.once ? listener.once : listener.on)(
@@ -179,5 +186,6 @@ export {
   loadCommands,
   loadEvents,
   permissions,
-  verify,
+  verify
 };
+

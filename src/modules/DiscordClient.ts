@@ -8,7 +8,6 @@ import {
 } from "node:fs";
 import { EOL } from "node:os";
 import { join } from "node:path";
-import { URL } from "node:url";
 import { mcnames } from "$/db/mcnames";
 import {
   type Channel,
@@ -60,16 +59,10 @@ class DiscordClient<Ready extends boolean = boolean> extends Client<Ready> {
       { ts: number; url: RegExpExecArray }[]
     >();
     const base = new URL(import.meta.url);
-    loadCommands(
-      new URL("../commands/user", base).pathname,
-      this.slashCommands,
-    );
-    loadCommands(
-      new URL("../commands/moderation", base).pathname,
-      this.slashCommands,
-    );
-    loadCommands(new URL("../commands/dev", base).pathname, this.slashCommands);
-    loadEvents(this, new URL("../events", base).pathname);
+    loadCommands(new URL("../commands/user", base), this.slashCommands);
+    loadCommands(new URL("../commands/moderation", base), this.slashCommands);
+    loadCommands(new URL("../commands/dev", base), this.slashCommands);
+    loadEvents(this, new URL("../events", base));
 
     this.blacklist = readFileSync("configs/badwords.txt", "utf-8")
       .split(EOL)
