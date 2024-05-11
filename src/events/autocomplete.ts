@@ -1,17 +1,20 @@
-import { Events, Interaction } from "discord.js";
-import { EventListener } from "../modules/EventListener.js";
-import { sql } from "../modules/db";
-import logger from "../modules/logger";
+import { Aliases } from "$/db/Aliases";
+import { CustomCommands } from "$/db/CustomCommands";
+import type DiscordClient from "$/modules/DiscordClient";
+import { EventListener } from "$/modules/EventListener";
+import { db, sql } from "$/modules/db";
+import logger from "$/modules/logger";
+import type { Interaction } from "discord.js";
 
-export default class AutocompleteHandler extends EventListener<Events.InteractionCreate> {
-  public eventName: Events.InteractionCreate;
-  async handle(interaction: Interaction) {
+export default new (class AutocompleteHandler extends EventListener<"interactionCreate"> {
+  public eventName = "interactionCreate" as const;
+  async handle(client: DiscordClient, interaction: Interaction) {
     if (!interaction.isAutocomplete()) return;
     switch (interaction.commandName) {
       case "checkdb":
         {
           const input = interaction.options.getFocused();
-          if (typeof input == "number") return;
+          if (typeof input === "number") return;
           const tableNames = await sql<{ table_name: string }[]>`SELECT
                 table_name
               FROM
@@ -32,9 +35,13 @@ export default class AutocompleteHandler extends EventListener<Events.Interactio
       case "edit":
         {
           const input = interaction.options.getFocused();
-          if (typeof input == "number") return;
+          if (typeof input === "number") return;
           interaction.respond(
-            (await CustomCommand.findAll())
+            (
+              await db
+                .select({ commandName: CustomCommands.commandName })
+                .from(CustomCommands)
+            )
               .map((ccmd) => ccmd.commandName)
               .filter((ccmd) =>
                 ccmd.toLowerCase().startsWith(input.toLowerCase()),
@@ -51,7 +58,11 @@ export default class AutocompleteHandler extends EventListener<Events.Interactio
                 const input = interaction.options.getFocused();
                 if (typeof input === "number") return;
                 interaction.respond(
-                  (await CustomCommand.findAll())
+                  (
+                    await db
+                      .select({ commandName: CustomCommands.commandName })
+                      .from(CustomCommands)
+                  )
                     .map((ccmd) => ccmd.commandName)
                     .filter((ccmd) =>
                       ccmd.toLowerCase().startsWith(input.toLowerCase()),
@@ -65,7 +76,7 @@ export default class AutocompleteHandler extends EventListener<Events.Interactio
                 const input = interaction.options.getFocused();
                 if (typeof input === "number") return;
                 interaction.respond(
-                  (await Alias.findAll())
+                  (await db.select({ name: Aliases.name }).from(Aliases))
                     .map((alias) => alias.name)
                     .filter((alias) =>
                       alias.toLowerCase().startsWith(input.toLowerCase()),
@@ -97,4 +108,4 @@ export default class AutocompleteHandler extends EventListener<Events.Interactio
         break;
     }
   }
-}
+})();

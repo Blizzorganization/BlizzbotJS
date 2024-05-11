@@ -1,45 +1,41 @@
 import {
-  Client,
-  Collection,
-  DiscordAPIError,
-  IntentsBitField,
-  Partials,
-} from "discord.js";
-import {
+  appendFileSync,
   copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
   writeFileSync,
-  appendFileSync,
-} from "fs";
-import { EOL } from "os";
-import { join } from "path";
-import { inspect } from "util";
-import { MCUser, sql } from "./db.js";
-import logger from "./logger.js";
-import { loadCommands, loadEvents, permissions } from "./utils.js";
-import { discord as discordConfig } from "./config.js";
-import ptero from "./ptero.js";
+} from "node:fs";
+import { EOL } from "node:os";
+import { join } from "node:path";
+import { URL } from "node:url";
+import { mcnames } from "$/db/mcnames";
+import {
+  type Channel,
+  Client,
+  Collection,
+  IntentsBitField,
+  Partials,
+} from "discord.js";
+import { and, isNotNull } from "drizzle-orm";
+import type { Command } from "./command";
+import { db } from "./db";
+import ptero from "./ptero";
+import { loadCommands, loadEvents } from "./utils";
 
 interface WhitelistEntry {
   uuid: string;
   name: string;
 }
 
-function handleChannelFetchError(e: DiscordAPIError) {
-  logger.error(
-    `Received an error fetching the log channel: ${e.name} - ${e.message}`,
-  );
-}
-
-class DiscordClient extends Client {
-  commands: Collection<unknown, unknown>;
-  slashCommands: Collection<unknown, unknown>;
-  contextCommands: Collection<unknown, unknown>;
-  linkUsage: Collection<unknown, unknown>;
+class DiscordClient<Ready extends boolean = boolean> extends Client<Ready> {
+  slashCommands: Collection<string, Command>;
+  linkUsage: Collection<string, { ts: number; url: RegExpExecArray }[]>;
   blacklist: string[];
   welcomeTexts: string[];
+  logChannel?: Channel;
+  standardChannel?: Channel;
+  anfrageChannel?: Channel;
 
   constructor() {
     super({
@@ -58,102 +54,23 @@ class DiscordClient extends Client {
         Partials.User,
       ],
     });
-    this.commands = new Collection();
-    this.slashCommands = new Collection();
-    this.contextCommands = new Collection();
-    this.linkUsage = new Collection();
-    this.on("ready", () => {
-      logger.info("The bot just started.");
-    });
-    loadCommands("commands/slash/user", this.slashCommands);
-    loadCommands("commands/slash/moderation", this.slashCommands);
-    loadCommands("commands/slash/dev", this.slashCommands);
-    loadEvents(this, "events");
-    if (process.env.DEBUG === "2")
-      this.on("debug", (m) => {
-        logger.debug(m);
-      });
-    this.on("warn", (m) => {
-      logger.warn(m);
-    });
-    this.on("error", (m) => {
-      logger.error(m);
-    });
-    this.once("ready", async () => {
-      const verificationChannel = await this.channels
-        .fetch(config.channels.verificate, { cache: true })
-        .catch(handleChannelFetchError);
-      if (!verificationChannel || !verificationChannel.isText()) {
-        logger.warn(
-          "The verificate channel supplied in the config file is not a text channel.",
-        );
-        return;
-      }
-      await verificationChannel.messages.fetch(config.verificationMessage);
-      this.logChannel = await this.channels
-        .fetch(config.channels.log, { cache: true })
-        .catch(handleChannelFetchError);
-      if (!this.logChannel || !this.logChannel.isText()) {
-        logger.warn(
-          "The log channel supplied in the config file is not a text channel.",
-        );
-        return;
-      }
-      this.anfrageChannel = await this.channels
-        .fetch(config.channels.anfrage, { cache: true })
-        .catch(handleChannelFetchError);
-      if (!this.anfrageChannel || !this.anfrageChannel.isText()) {
-        logger.warn(
-          "The Anfrage channel supplied in the config file is not a text channel.",
-        );
-        return;
-      }
-      this.standardChannel = await this.channels
-        .fetch(config.channels.standard, { cache: true })
-        .catch(handleChannelFetchError);
-      if (!this.standardChannel || !this.standardChannel.isText()) {
-        logger.warn(
-          "The 'standard' channel supplied in the config file is not a text channel.",
-        );
-        return;
-      }
-      const slashGuild = await this.guilds
-        .fetch(discordConfig.slashGuild)
-        .catch(() => {
-          logger.warn(
-            "received an error while trying to fetch the slashGuild.",
-          );
-        });
-      if (!slashGuild) return;
-      const slashSetup = this.slashCommands.map((cmd, name) => {
-        logger.silly(`Parsing Command ${name}`);
-        logger.silly(`Command setup is ${inspect(cmd.setup)}`);
-        return cmd.setup;
-      });
-      this.contextCommands.forEach((cmd) => slashSetup.push(cmd.toJson()));
-      const slashCommands = await slashGuild.commands.set(slashSetup);
-      const fullPermissions = new Array();
-      slashCommands
-        .filter(
-          (cmd) => this.slashCommands.get(cmd.name).perm === permissions.mod,
-        )
-        .forEach((cmd, id) => {
-          /** @type {import("discord.js").GuildApplicationCommandPermissionData} */
-          const perm = {
-            id,
-            permissions: [
-              {
-                id: discordConfig.roles.mod,
-                permission: true,
-                type: "ROLE",
-              },
-            ],
-          };
-          fullPermissions.push(perm);
-        });
-      logger.silly(`slash perms are ${inspect(fullPermissions)}`);
-      slashGuild.commands.permissions.set({ fullPermissions });
-    });
+    this.slashCommands = new Collection<string, Command>();
+    this.linkUsage = new Collection<
+      string,
+      { ts: number; url: RegExpExecArray }[]
+    >();
+    const base = new URL(import.meta.url);
+    loadCommands(
+      new URL("../commands/user", base).pathname,
+      this.slashCommands,
+    );
+    loadCommands(
+      new URL("../commands/moderation", base).pathname,
+      this.slashCommands,
+    );
+    loadCommands(new URL("../commands/dev", base).pathname, this.slashCommands);
+    loadEvents(this, new URL("../events", base).pathname);
+
     this.blacklist = readFileSync("configs/badwords.txt", "utf-8")
       .split(EOL)
       .filter((word) => word !== "");
@@ -162,25 +79,18 @@ class DiscordClient extends Client {
       .filter((word) => word !== "");
   }
   async syncWhitelist() {
-    const mcusers = await sql<MCUser>`SELECT * FROM "mcnames";`;
-    const twitch: WhitelistEntry[] = mcusers.filter(
-      (usr) => usr.whitelistTwitch,
-    );
-    const youtube: WhitelistEntry[] = [];
-    mcusers.forEach((mcUser) => {
-      if (mcUser.get("whitelistTwitch")) {
-        twitch.push({
-          uuid: mcUser.mcId,
-          name: mcUser.mcName,
-        });
-      }
-      if (mcUser.get("whitelistYouTube")) {
-        youtube.push({
-          uuid: mcUser.mcId,
-          name: mcUser.mcName,
-        });
-      }
-    });
+    const mcusers = await db
+      .select()
+      .from(mcnames)
+      .where(and(isNotNull(mcnames.mcId), isNotNull(mcnames.mcName)));
+    const twitch: WhitelistEntry[] = mcusers
+      .filter((usr) => usr.whitelistTwitch)
+      // biome-ignore lint/style/noNonNullAssertion: checked via isNotNull query
+      .map((usr) => ({ name: usr.mcName!, uuid: usr.mcId! }));
+    const youtube: WhitelistEntry[] = mcusers
+      .filter((usr) => usr.whitelistYoutube)
+      // biome-ignore lint/style/noNonNullAssertion: checked via isNotNull query
+      .map((usr) => ({ name: usr.mcName!, uuid: usr.mcId! }));
     const ytlist = JSON.stringify(youtube, undefined, 2);
     const twlist = JSON.stringify(twitch, undefined, 2);
 
@@ -188,12 +98,10 @@ class DiscordClient extends Client {
     if (!existsSync("whitelist")) mkdirSync("whitelist");
     if (!existsSync("whitelist/twitch")) mkdirSync("whitelist/twitch");
     if (!existsSync("whitelist/youtube")) mkdirSync("whitelist/youtube");
-    ["paths", "pterodactyl"].forEach((txtFile) =>
-      appendFileSync(`whitelist/youtube/${txtFile}.txt`, ""),
-    );
-    ["paths", "pterodactyl"].forEach((txtFile) =>
-      appendFileSync(`whitelist/twitch/${txtFile}.txt`, ""),
-    );
+    for (const txtFile of ["paths", "pterodactyl"]) {
+      appendFileSync(`whitelist/youtube/${txtFile}.txt`, "");
+      appendFileSync(`whitelist/twitch/${txtFile}.txt`, "");
+    }
 
     writeFileSync("whitelist/youtube/whitelist.json", ytlist);
     writeFileSync("whitelist/twitch/whitelist.json", twlist);

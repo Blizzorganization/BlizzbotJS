@@ -1,12 +1,77 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import logger from "./logger.js";
+import { existsSync, writeFileSync } from "node:fs";
+import { z } from "zod";
+import { loadConfig } from "zod-config";
+import { jsonAdapter } from "zod-config/json-adapter";
+import envConfig from "./envConfig";
+import logger from "./logger";
+export type DatabaseConfig = z.infer<typeof databaseConfigSchema>;
 
-const defaultConfig = {
+const databaseConfigSchema = z.object({
+  host: z.string().default("localhost").describe("the database host"),
+  port: z
+    .number()
+    .max(65535)
+    .int()
+    .default(5432)
+    .describe("the port the database is listening on"),
+  user: z
+    .string()
+    .describe("the username we want to connect to the database as"),
+  database: z.string().describe("the database we want to connect to"),
+  password: z
+    .string()
+    .describe("the password to use for authenticating to the database"),
+});
+const snowflakeSchema = z.string().regex(/^\d+$/);
+const discordConfigSchema = z.object({
+  token: z.string({
+    message: "The Bot token from https://discord.com/developers/applications",
+  }),
+  prefix: z.string().default("!").describe("the bot's command prefix"),
+  slashGuild: snowflakeSchema.describe(
+    "the id of the server we want to register our commands to",
+  ),
+  verificationMessage: snowflakeSchema,
+  channels: z.object({
+    log: snowflakeSchema,
+    commands: z.array(snowflakeSchema),
+    ignore: z.array(snowflakeSchema),
+    clips: snowflakeSchema,
+    standard: snowflakeSchema,
+    adminCommands: z.array(snowflakeSchema),
+    modCommands: z.array(snowflakeSchema),
+    anfrage: snowflakeSchema,
+    verificate: snowflakeSchema,
+    voiceCategory: snowflakeSchema,
+    textVoiceCategory: snowflakeSchema,
+  }),
+  roles: z.object({
+    whitelist: z.object({
+      youtube: z.array(snowflakeSchema),
+      twitch: z.array(snowflakeSchema),
+    }),
+    noFilter: z.array(snowflakeSchema),
+    verify: snowflakeSchema,
+    dev: snowflakeSchema,
+    mod: snowflakeSchema,
+  }),
+  emojis: z.object({
+    left: snowflakeSchema,
+    right: snowflakeSchema,
+    randomReaction: snowflakeSchema,
+  }),
+});
+const pteroConfigSchema = z.object({
+  host: z.string().url().describe("The URL of your Pterodactyl Panel instance"),
+  apiKey: z.string().describe("Pterodactyl Client API Key"),
+});
+const defaultConfig: z.infer<typeof configSchema> = {
   discord: {
     token:
       "The Bot token. Get one from https://discord.com/developers/applications",
     prefix: "!",
     slashGuild: "1234",
+    verificationMessage: "1234",
     channels: {
       log: "1234",
       commands: ["1234", "5678"],
@@ -33,7 +98,7 @@ const defaultConfig = {
     emojis: {
       left: "1234",
       right: "5678",
-      randomReaction: "<:name:id>",
+      randomReaction: "9012",
     },
   },
   database: {
@@ -42,7 +107,6 @@ const defaultConfig = {
     user: "blizzbot",
     database: "blizzbot",
     password: "secret_database_password",
-    type: "postgres",
   },
   pterodactyl: {
     host: "",
@@ -59,66 +123,27 @@ if (!existsSync("configs/config.json")) {
   logger.info("Created a configuration file - please fill.");
   process.exit(1);
 }
-const config = JSON.parse(readFileSync("configs/config.json", "utf8"));
 
-/** @type {import("../typings/config.js")["blizzbot"]["discord"]}*/
-const discord = {
-  token:
-    config.discord.token ||
-    (() => {
+export const configSchema = z.object({
+  database: databaseConfigSchema,
+  discord: discordConfigSchema,
+  pterodactyl: pteroConfigSchema,
+});
+
+export default await loadConfig({
+  schema: configSchema,
+  adapters: [
+    { read: async () => envConfig, name: "env" },
+    jsonAdapter({ path: "configs/config.json" }),
+  ],
+  onError(error) {
+    for (const issue of error.issues) {
       logger.error(
-        "No token supplied. Get one from https://discord.com/developers/applications",
+        `Configuration key "${issue.path.join(".")}" was not set correctly: ${
+          issue.message
+        } [${issue.code}]`,
       );
-      process.exit(1);
-    })(),
-  slashGuild: config.discord.slashGuild || "1234",
-  prefix: config.discord.prefix || "!",
-  verificationMessage: config.discord.verifymessage || "1234",
-  channels: {
-    log: config.discord.channels.log || "1234",
-    clips: config.discord.channels.clips || "1234",
-    commands: config.discord.channels.commands || [],
-    modCommands: config.discord.channels.modCommands || [],
-    adminCommands: config.discord.channels.adminCommands || [],
-    anfrage: config.discord.channels.anfrage || "1234",
-    ignore: config.discord.channels.ignore || [],
-    verificate: config.discord.channels.verificate || "1234",
-    standard: config.discord.channels.standard || "1234",
-    voiceCategory: config.discord.channels.voiceCategory || "1234",
-    textVoiceCategory: config.discord.channels.textVoiceCategory || "1234",
+    }
+    process.exit(1);
   },
-  roles: {
-    whitelist: {
-      youtube: config.discord.roles.whitelist.youtube || [],
-      twitch: config.discord.roles.whitelist.twitch || [],
-    },
-    noFilter: config.discord.roles.noFilter || [],
-    verify: config.discord.roles.verify || "1234",
-    dev: config.discord.roles.dev || "1234",
-    mod: config.discord.roles.mod || "1234",
-  },
-  emojis: {
-    left: config.discord.emojis.left || "1234",
-    right: config.discord.emojis.right || "5678",
-    randomReaction:
-      config.discord.emojis.ranodmReaction || "<:ZZBlizzor:493814042780237824>",
-  },
-};
-/** @type {import("../typings/config.js")["blizzbot"]["database"]}*/
-const database = {
-  host: config.database.host || "localhost",
-  port: config.database.port || 5432,
-  user: config.database.user || "blizzbot",
-  database: config.database.database || "blizzbot",
-  password: config.database.password || "",
-  type: ["mysql", "postgres"].includes(config.database.type)
-    ? config.database.type
-    : "postgres",
-};
-/** @type {import("../typings/config.js")["blizzbot"]["pterodactyl"]}*/
-const pterodactyl = {
-  host: config.pterodactyl.host || "",
-  apiKey: config.pterodactyl.apiKey || "",
-};
-
-export { discord, database, pterodactyl };
+});

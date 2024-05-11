@@ -1,22 +1,24 @@
-import logger from "../modules/logger.js";
-import { checkMessage } from "./message.js";
+import type DiscordClient from "$/modules/DiscordClient";
+import { EventListener } from "$/modules/EventListener";
+import config from "$/modules/config";
+import logger from "$/modules/logger";
+import type { Message } from "discord.js";
+import { Events } from "discord.js";
+import { checkMessage } from "./message";
 
-/**
- * @param  {import("../modules/DiscordClient").default} client
- * @param  {import("discord.js").Message} oldMessage
- * @param  {import("discord.js").Message} newMessage
- */
-export async function handle(client, oldMessage, newMessage) {
-  logger.silly("message edit received");
-  if (!newMessage) return;
-  logger.silly("message exists");
-  if (newMessage.partial) newMessage = await newMessage.fetch();
-  logger.silly("fetched possible partial message");
-  // ignore webhooks
-  if (newMessage.author.discriminator === "0000") return;
-  if (client.config.channels.ignore.includes(newMessage.channelId)) return;
-  checkMessage(client, newMessage);
-}
-
-export const disabled = false;
-export const name = "messageUpdate";
+export default new (class MessageEditHandler extends EventListener<Events.MessageUpdate> {
+  public eventName = Events.MessageUpdate as const;
+  async handle(
+    client: DiscordClient,
+    _oldMessage: Message<boolean>,
+    newMessage: Message<boolean>,
+  ) {
+    logger.silly("message edit received");
+    logger.silly("message exists");
+    // ignore webhooks
+    if (!newMessage.inGuild()) return;
+    if (newMessage.webhookId != null) return;
+    if (config.discord.channels.ignore.includes(newMessage.channelId)) return;
+    await checkMessage(client, newMessage);
+  }
+})();

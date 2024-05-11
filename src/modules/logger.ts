@@ -6,7 +6,7 @@ process.env.DEBUG = process.env.DEBUG ?? "0";
 const { createLogger, format, transports } = winston;
 
 const logger = createLogger({
-  level: "silly",
+  level: "info",
   format: format.combine(
     format.timestamp({
       format: "YYYY-MM-DD HH:mm:ss",

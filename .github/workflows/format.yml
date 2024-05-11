@@ -1,35 +1,18 @@
-name: Format review
+name: Code quality
 
 on:
   push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
 
 jobs:
-  review:
-    name: Review formatting
+  quality:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Install bun
-        uses: oven-sh/setup-bun@v1
-
-      - name: Restore CI Cache
-        uses: actions/cache@v2
-        id: cache
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
         with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/bun.lockb') }}
-
-      - name: Install Dependencies
-        if: ${{ !steps.cache.outputs.cache-hit }}
-        run: bun ci
-
-      - name: Run ESLint
-        run: bunx eslint .
+          version: latest
+      - name: Run Biome
+        run: biome ci .

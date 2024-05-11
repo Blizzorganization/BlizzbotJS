@@ -1,10 +1,8 @@
-import { copyFileSync, existsSync, writeFileSync } from "fs";
-import repl from "repl";
-import { discord } from "./modules/config.js";
-import * as db from "./modules/db.js";
-import DiscordClient from "./modules/DiscordClient.js";
-import logger from "./modules/logger.js";
-import "./modules/ptero.js";
+import { copyFileSync, existsSync, writeFileSync } from "node:fs";
+import DiscordClient from "./modules/DiscordClient";
+import config from "./modules/config";
+import * as db from "./modules/db";
+import logger from "./modules/logger";
 
 logger.silly("ensuring the existence of a badwords.txt file");
 if (!existsSync("configs/badwords.txt"))
@@ -17,12 +15,10 @@ if (!existsSync("configs/welcome.txt"))
 logger.silly("creating the discord client");
 const client = new DiscordClient();
 logger.silly("initializing the database");
-await db.sql`SELECT 1+1;`;
 logger.silly("creating the pterodactyl client");
 logger.info("Discord Client logging in.");
-client.login(discord.token);
-const r = repl.start("> ");
-async function stop() {
+client.login(config.discord.token);
+export async function stop() {
   logger.info("Shutting down, please wait.");
   const stopping: Promise<unknown>[] = [];
   stopping.push(client.destroy());
@@ -35,15 +31,3 @@ async function stop() {
 process.on("SIGINT", async () => {
   await stop();
 });
-r.context.client = client;
-r.context.db = db;
-r.context.logger = logger;
-r.context.stop = stop;
-r.on("close", () => {
-  stop();
-});
-r.defineCommand("stop", {
-  action: stop,
-  help: "Stop the bot",
-});
-export const context = r.context;

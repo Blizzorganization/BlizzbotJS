@@ -1,19 +1,21 @@
-import { ClientServer, PteroClient } from "@devnote-dev/pterojs";
-import logger from "./logger.js";
-import { pterodactyl as pteroConf } from "./config.js";
+import { ClientServer, PteroClient } from "@robertsspaceindustries/pterojs";
+import config from "./config";
+import logger from "./logger";
 
 export class Ptero {
-  ptero: PteroClient;
+  #ptero: PteroClient;
 
   constructor() {
-    this.ptero = new PteroClient(pteroConf.host, pteroConf.apiKey, {
-      servers: { fetch: true, cache: true, max: true },
-    });
-    this.ptero.connect();
+    this.#ptero = new PteroClient(
+      config.pterodactyl.host,
+      config.pterodactyl.apiKey,
+      { servers: { fetch: true, cache: true } },
+    );
+    this.#ptero.connect();
   }
 
   async writeFile(srvid: string, filepath: string, content: string) {
-    const srv = await this.ptero.servers.fetch(srvid);
+    const srv = await this.#ptero.servers.fetch(srvid);
     if (!(srv instanceof ClientServer)) {
       logger.warn(`Server ${srvid} is not a client server.`);
       return;

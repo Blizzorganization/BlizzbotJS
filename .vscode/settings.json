@@ -1,0 +1,6 @@
+{
+    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    }
+}
