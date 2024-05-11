@@ -16,7 +16,7 @@ export default new (class CheckDBCommand extends Command {
   public name = "checkdb";
   public setup = new SlashCommandBuilder()
     .setName(this.name)
-    .setDescription("")
+    .setDescription("Check the contents of a database table")
     .setDescriptionLocalization(
       "de",
       "zeigt eine übersicht der Daten in der Datenbank",
@@ -25,7 +25,7 @@ export default new (class CheckDBCommand extends Command {
       opt
         .setChoices([])
         .setName("table")
-        .setNameLocalization("de", "Tabelle")
+        .setNameLocalization("de", "tabelle")
         .setRequired(true)
         .setDescriptionLocalization("de", "Die anzuzeigende Tabelle")
         .setDescription("The database table to show"),

@@ -38,50 +38,21 @@ export default new (class DeleteCommand extends Command {
               .setAutocomplete(true),
           ),
       )
-      .addSubcommandGroup((subCommandGroup) =>
-        subCommandGroup
+      .addSubcommand((subCommand) =>
+        subCommand
           .setName("alias")
           .setDescription("Delete an Alias")
           .setDescriptionLocalization("de", "Entferne einen Alias")
-          .addSubcommand((subCommand) =>
-            subCommand
-              .setName("customcommand")
-              .setDescription("An Alias referencing a customcommand")
+          .addStringOption((option) =>
+            option
+              .setRequired(true)
+              .setName("name")
               .setDescriptionLocalization(
                 "de",
-                "Ein Alias, der auf einen Customcommand verweist",
+                "Der Name, auf den der Alias reagiert",
               )
-              .addStringOption((option) =>
-                option
-                  .setRequired(true)
-                  .setName("name")
-                  .setDescriptionLocalization(
-                    "de",
-                    "Der Name, auf den der Alias reagiert",
-                  )
-                  .setDescription("The name of the alias")
-                  .setAutocomplete(true),
-              ),
-          )
-          .addSubcommand((subCommand) =>
-            subCommand
-              .setName("command")
-              .setDescription("An Alias referencing a command")
-              .setDescriptionLocalization(
-                "de",
-                "Ein Alias, der auf einen Befehl verweist",
-              )
-              .addStringOption((option) =>
-                option
-                  .setRequired(true)
-                  .setName("name")
-                  .setDescriptionLocalization(
-                    "de",
-                    "Der Name, auf den der Alias reagiert",
-                  )
-                  .setDescription("The name of the alias")
-                  .setAutocomplete(true),
-              ),
+              .setDescription("The name of the alias")
+              .setAutocomplete(true),
           ),
       )
       .addSubcommand((subCommand) =>

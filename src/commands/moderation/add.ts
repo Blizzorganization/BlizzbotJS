@@ -47,8 +47,6 @@ export default new (class AddCommand extends Command {
         .setName("alias")
         .setDescription("Add an Alias")
         .setDescriptionLocalization("de", "Füge einen Alias hinzu")
-        .setName("customcommand")
-        .setDescription("An Alias referencing a customcommand")
         .setDescriptionLocalization(
           "de",
           "Ein Alias, der auf einen Customcommand verweist",

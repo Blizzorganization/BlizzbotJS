@@ -1,5 +1,5 @@
 import { Console } from "node:console";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
 import { PassThrough } from "node:stream";
 import { URL } from "node:url";
 import { mcnames } from "$/db/mcnames";
@@ -25,12 +25,14 @@ async function loadCommands(
     );
   const commandFiles = readdirSync(commandDir);
   for (const fileName of commandFiles) {
-    const commandURL = new URL(fileName, commandDir);
-    const path = Bun.fileURLToPath(commandURL.href);
+    const path = `${commandDir.href}/${fileName}`;
     if (!(fileName.endsWith(".js") || fileName.endsWith(".ts"))) {
-      logger.error(
-        `${path} is not a javascript or typescript file and does not belong in the event directory`,
-      );
+      const stat = statSync(new URL(path));
+      if (!stat.isDirectory()) {
+        logger.warn(
+          `${path} is not a javascript or typescript file and does not belong in the event directory`,
+        );
+      }
       continue;
     }
     logger.silly(`reading command file at ${commandDir}/${fileName}`);
@@ -84,8 +86,7 @@ async function checkWhitelist(_client: DiscordClient, message: Message) {
 async function loadEvents(listener: DiscordClient, directory: URL) {
   const eventFiles = readdirSync(directory);
   for (const file of eventFiles) {
-    const eventURL = new URL(file, directory);
-    const path = Bun.fileURLToPath(eventURL.href);
+    const path = `${directory.href}/${file}`;
     if (!(file.endsWith(".js") || file.endsWith(".ts"))) {
       logger.warn(
         `${path} is not a javascript or typescript file and does not belong in the event directory`,
@@ -98,10 +99,11 @@ async function loadEvents(listener: DiscordClient, directory: URL) {
       logger.info(`Event ${path} is disabled.`);
       continue;
     }
-    (event.once ? listener.once : listener.on)(
-      event.eventName,
-      event.handle.bind(null, listener),
-    );
+    if (event.once) {
+      listener.once(event.eventName, event.handle.bind(null, listener));
+    } else {
+      listener.on(event.eventName, event.handle.bind(null, listener));
+    }
   }
 }
 
@@ -186,6 +188,5 @@ export {
   loadCommands,
   loadEvents,
   permissions,
-  verify
+  verify,
 };
-
