@@ -1,5 +1,5 @@
-import config from "./configs/config.json";
 import { defineConfig } from "drizzle-kit";
+import config from "./configs/config.json";
 
 export default defineConfig({
   dbCredentials: {
