@@ -25,7 +25,7 @@ export default new (class SlashCommandHandler extends EventListener<Events.Inter
     try {
       await cmd.run(client, interaction);
     } catch (e) {
-      logger.error("failed ");
+      logger.error(`command ${cmd.name} failed (${interaction.id})`);
     }
     const afterRun = Date.now();
     logger.info(

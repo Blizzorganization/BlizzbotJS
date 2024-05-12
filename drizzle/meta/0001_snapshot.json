@@ -33,12 +33,8 @@
           "name": "Aliases_command_CustomCommands_commandName_fk",
           "tableFrom": "Aliases",
           "tableTo": "CustomCommands",
-          "columnsFrom": [
-            "command"
-          ],
-          "columnsTo": [
-            "commandName"
-          ],
+          "columnsFrom": ["command"],
+          "columnsTo": ["commandName"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -82,9 +78,7 @@
         "CustomCommands_commandName_unique": {
           "name": "CustomCommands_commandName_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "commandName"
-          ]
+          "columns": ["commandName"]
         }
       }
     },

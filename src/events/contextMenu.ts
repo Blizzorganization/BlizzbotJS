@@ -13,7 +13,9 @@ export default new (class ContextMenuHandler extends EventListener<Events.Intera
     if (!interaction.isContextMenuCommand()) return;
     switch (interaction.commandName) {
       default:
-        logger.warn(`Unknown ContextMenu received: ${interaction.commandName}`);
+        logger.warning(
+          `Unknown ContextMenu received: ${interaction.commandName}`,
+        );
         break;
     }
   }

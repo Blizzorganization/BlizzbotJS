@@ -4,18 +4,18 @@ import config from "./modules/config";
 import * as db from "./modules/db";
 import logger from "./modules/logger";
 
-logger.silly("ensuring the existence of a badwords.txt file");
+logger.debug("ensuring the existence of a badwords.txt file");
 if (!existsSync("configs/badwords.txt"))
   writeFileSync("configs/badwords.txt", "", { encoding: "utf-8" });
 
-logger.silly("ensuring the existence of a welcome.txt file");
+logger.debug("ensuring the existence of a welcome.txt file");
 if (!existsSync("configs/welcome.txt"))
   copyFileSync("configs/welcome.default.txt", "configs/welcome.txt");
 
-logger.silly("creating the discord client");
+logger.debug("creating the discord client");
 const client = new DiscordClient();
-logger.silly("initializing the database");
-logger.silly("creating the pterodactyl client");
+logger.debug("initializing the database");
+logger.debug("creating the pterodactyl client");
 logger.info("Discord Client logging in.");
 client.login(config.discord.token);
 export async function stop() {

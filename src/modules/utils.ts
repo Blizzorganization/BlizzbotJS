@@ -29,21 +29,21 @@ async function loadCommands(
     if (!(fileName.endsWith(".js") || fileName.endsWith(".ts"))) {
       const stat = statSync(new URL(path));
       if (!stat.isDirectory()) {
-        logger.warn(
+        logger.warning(
           `${path} is not a javascript or typescript file and does not belong in the event directory`,
         );
       }
       continue;
     }
-    logger.silly(`reading command file at ${commandDir}/${fileName}`);
+    logger.debug(`reading command file at ${commandDir}/${fileName}`);
     const cmd = (await import(path)).default as unknown;
     if (!cmd || !(cmd instanceof Command)) {
-      logger.warn(`File ${path} is not a Command.`);
+      logger.warning(`File ${path} is not a Command.`);
       continue;
     }
     const name = fileName.split(".")[0];
     if (!name) {
-      logger.warn("JS File in command directory that does not have a name.");
+      logger.warning("JS File in command directory that does not have a name.");
       continue;
     }
     if (name !== cmd.name) {
@@ -53,7 +53,7 @@ async function loadCommands(
       continue;
     }
     if (cmd.disabled) {
-      logger.warn(`Loading command ${name} which is disabled.`);
+      logger.warning(`Loading command ${name} which is disabled.`);
     }
     commandMap.set(name, cmd);
   }
@@ -88,7 +88,7 @@ async function loadEvents(listener: DiscordClient, directory: URL) {
   for (const file of eventFiles) {
     const path = `${directory.href}/${file}`;
     if (!(file.endsWith(".js") || file.endsWith(".ts"))) {
-      logger.warn(
+      logger.warning(
         `${path} is not a javascript or typescript file and does not belong in the event directory`,
       );
       continue;
@@ -153,7 +153,7 @@ function createTable(list: unknown[]): string {
 
 async function verify(client: DiscordClient, username: string): Promise<void> {
   if (!client.welcomeTexts || client.welcomeTexts.length === 0) {
-    logger.silly("There are no welcome messages.");
+    logger.debug("There are no welcome messages.");
     return;
   }
   const msg = client.welcomeTexts[

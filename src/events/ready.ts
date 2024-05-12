@@ -3,7 +3,6 @@ import { EventListener } from "$/modules/EventListener";
 import config from "$/modules/config";
 import logger from "$/modules/logger";
 import { createTable } from "$/modules/utils";
-import { inspect } from "bun";
 import { Events } from "discord.js";
 
 export default new (class ReadyHandler extends EventListener<Events.ClientReady> {
@@ -17,7 +16,7 @@ export default new (class ReadyHandler extends EventListener<Events.ClientReady>
         logger.error("Failed to fetch verification channel", e);
       });
     if (!verificationChannel || !verificationChannel.isTextBased()) {
-      logger.warn(
+      logger.warning(
         "The verificate channel supplied in the config file is not a text channel.",
       );
       return;
@@ -32,7 +31,7 @@ export default new (class ReadyHandler extends EventListener<Events.ClientReady>
           logger.error("Failed to fetch log channel", e);
         })) ?? undefined;
     if (!client.logChannel?.isTextBased()) {
-      logger.warn(
+      logger.warning(
         "The log channel supplied in the config file is not a text channel.",
       );
       return;
@@ -44,7 +43,7 @@ export default new (class ReadyHandler extends EventListener<Events.ClientReady>
           logger.error("Failed to fetch anfrage channel", e);
         })) ?? undefined;
     if (!client.anfrageChannel?.isTextBased()) {
-      logger.warn(
+      logger.warning(
         "The Anfrage channel supplied in the config file is not a text channel.",
       );
       return;
@@ -56,7 +55,7 @@ export default new (class ReadyHandler extends EventListener<Events.ClientReady>
           logger.error("Failed to fetch standard channel", e);
         })) ?? undefined;
     if (!client.standardChannel?.isTextBased()) {
-      logger.warn(
+      logger.warning(
         "The 'standard' channel supplied in the config file is not a text channel.",
       );
       return;
@@ -64,12 +63,14 @@ export default new (class ReadyHandler extends EventListener<Events.ClientReady>
     const slashGuild = await client.guilds
       .fetch(config.discord.slashGuild)
       .catch(() => {
-        logger.warn("received an error while trying to fetch the slashGuild.");
+        logger.warning(
+          "received an error while trying to fetch the slashGuild.",
+        );
       });
     if (!slashGuild) return;
     const slashSetup = client.slashCommands.map((cmd, name) => {
       logger.debug(`Parsing Command ${name}`);
-      logger.debug(`Command setup is ${inspect(cmd.setup)}`);
+      logger.debug("Command setup is", cmd.setup);
       return cmd.setup;
     });
     // TODO

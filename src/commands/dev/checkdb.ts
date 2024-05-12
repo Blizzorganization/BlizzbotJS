@@ -7,6 +7,7 @@ import { Command } from "$/modules/command";
 import { db } from "$/modules/db";
 import { splitMessage } from "$/modules/splitMessage";
 import { createTable, permissions } from "$/modules/utils";
+import mkOption from "$/utils/mkOption";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 import { desc } from "drizzle-orm";
@@ -23,7 +24,9 @@ export default new (class CheckDBCommand extends Command {
     )
     .addStringOption((opt) =>
       opt
-        .setChoices([])
+        .setChoices(
+          ["Aliases", "ranking", "mcnames", "CustomCommands"].map(mkOption),
+        )
         .setName("table")
         .setNameLocalization("de", "tabelle")
         .setRequired(true)

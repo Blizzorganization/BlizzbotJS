@@ -6,6 +6,6 @@ import { Events } from "discord.js";
 export default new (class WarnHandler extends EventListener<Events.Warn> {
   public eventName = Events.Warn as const;
   async handle(_client: DiscordClient, message: string) {
-    logger.warn(`[discord.js] ${message}`);
+    logger.warning(`[discord.js] ${message}`);
   }
 })();

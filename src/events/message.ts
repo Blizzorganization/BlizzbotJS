@@ -20,24 +20,24 @@ export default new (class MessageHandler extends EventListener<Events.MessageCre
     client: DiscordClient,
     message: Message<boolean>,
   ): Promise<void> {
-    logger.silly("message received");
+    logger.debug("message received");
     if (!message) return;
-    logger.silly("message exists");
+    logger.debug("message exists");
     const resolvedMessage = message.partial ? await message.fetch() : message;
-    logger.silly("fetched possible partial message");
+    logger.debug("fetched possible partial message");
     if (config.discord.channels.ignore.includes(resolvedMessage.channelId))
       return;
     if (!resolvedMessage.inGuild()) return;
     if (await checkMessage(client, resolvedMessage)) return;
-    logger.silly("message was clean.");
+    logger.debug("message was clean.");
     if (Math.random() > 0.999)
       resolvedMessage.react(config.discord.emojis.randomReaction);
-    logger.silly("checking for verification");
+    logger.debug("checking for verification");
     if (resolvedMessage.channelId === config.discord.channels.verificate) {
       if (
         resolvedMessage.content.toLowerCase() === `${config.discord.prefix}zz`
       ) {
-        logger.silly("verifying user..");
+        logger.debug("verifying user..");
         resolvedMessage.member?.roles.add(config.discord.roles.verify);
         verify(client, resolvedMessage.author.username);
       }

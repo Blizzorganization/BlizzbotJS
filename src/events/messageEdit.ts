@@ -13,8 +13,8 @@ export default new (class MessageEditHandler extends EventListener<Events.Messag
     _oldMessage: Message<boolean>,
     newMessage: Message<boolean>,
   ) {
-    logger.silly("message edit received");
-    logger.silly("message exists");
+    logger.debug("message edit received");
+    logger.debug("message exists");
     // ignore webhooks
     if (!newMessage.inGuild()) return;
     if (newMessage.webhookId != null) return;

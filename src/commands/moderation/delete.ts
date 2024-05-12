@@ -98,7 +98,7 @@ export default new (class DeleteCommand extends Command {
           await deleteBLWord(client, interaction);
           break;
         default:
-          logger.warn(`Unknown subcommand delete.${subCommand}`);
+          logger.warning(`Unknown subcommand delete.${subCommand}`);
           await interaction.reply(
             interaction.locale === "de"
               ? "Dieser Subcommand scheint nicht vorhanden zu sein, bitte melde dich beim Entwickler."

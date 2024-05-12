@@ -40,6 +40,7 @@ class DiscordClient<Ready extends boolean = boolean> extends Client<Ready> {
     super({
       intents: [
         IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.MessageContent,
         IntentsBitField.Flags.Guilds,
         IntentsBitField.Flags.GuildMembers,
         IntentsBitField.Flags.DirectMessages,

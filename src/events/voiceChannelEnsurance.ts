@@ -45,7 +45,7 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
         name: `Channel ${num}`,
         position: num,
       });
-      logger.silly("Creating new Voice channel as all old ones are used up.");
+      logger.debug("Creating new Voice channel as all old ones are used up.");
     }
     while (emptyVCs.size > 1) {
       // biome-ignore lint/style/noNonNullAssertion: there is at least one as checked above.
@@ -59,7 +59,7 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
       await vc.delete();
       await textVoice?.delete();
       emptyVCs.delete(vc.id);
-      logger.silly("Deleting extra empty voice channels");
+      logger.debug("Deleting extra empty voice channels");
     }
     if (emptyVCs.size > 0) {
       // biome-ignore lint/style/noNonNullAssertion: check above
@@ -98,7 +98,7 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
         (c) => c.name === `text-voice-${vcId}`,
       );
       if (!textVoice) {
-        logger.warn(
+        logger.warning(
           `There is a missing Text voice channel for Channel ${vcId}`,
         );
         return;

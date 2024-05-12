@@ -106,7 +106,7 @@ export default new (class AddCommand extends Command {
         addBLWord(client, interaction);
         break;
       default:
-        logger.warn(`Unknown subcommand add.${subCommand}`);
+        logger.warning(`Unknown subcommand add.${subCommand}`);
         await interaction.reply(
           interaction.locale === "de"
             ? "Dieser Subcommand scheint nicht vorhanden zu sein, bitte melde dich beim Entwickler."
