@@ -28,6 +28,9 @@ export async function stop() {
   logger.close();
   process.exit(0);
 }
-process.on("SIGINT", async () => {
-  await stop();
-});
+for (const sig of ["SIGINT", "SIGQUIT", "SIGTERM"] as const) {
+  process.on(sig, async (a) => {
+    logger.notice(`Received signal ${a}`);
+    await stop();
+  });
+}
