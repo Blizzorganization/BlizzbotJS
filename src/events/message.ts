@@ -44,18 +44,21 @@ export default new (class MessageHandler extends EventListener<Events.MessageCre
       if (resolvedMessage.deletable) resolvedMessage.delete();
       return;
     }
-    if (config.discord.channels.commands.includes(resolvedMessage.channelId)) {
-      await handleCommands(client, resolvedMessage);
+    if (
+      config.discord.channels.commands.includes(resolvedMessage.channelId) ||
+      (await handleCommands(client, resolvedMessage))
+    )
       return;
-    }
 
-    if (!resolvedMessage.guild) return;
     if (resolvedMessage.author.bot) return;
     calculateExperience(resolvedMessage);
   }
 })();
 
-async function handleCommands(_client: DiscordClient, message: Message<true>) {
+async function handleCommands(
+  _client: DiscordClient,
+  message: Message<true>,
+): Promise<boolean> {
   if (!message.content.startsWith(config.discord.prefix)) return false;
   const args = message.content.split(/ +/g);
   const command = (args.shift() ?? "")
