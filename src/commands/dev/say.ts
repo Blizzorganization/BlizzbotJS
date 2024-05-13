@@ -55,7 +55,7 @@ export default new (class SayCommand extends Command {
       );
       return;
     }
-    await channel?.send(text);
-    await interaction.deferReply();
+    await channel.send(text);
+    await interaction.reply("Die Nachricht wurde erfolgreich gesendet");
   }
 })();
