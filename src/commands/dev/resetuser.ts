@@ -3,6 +3,7 @@ import { ranking } from "$/db/ranking";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import { db } from "$/modules/db";
+import logger from "$/modules/logger";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
@@ -36,7 +37,9 @@ export default new (class ResetuserCommand extends Command {
   ): Promise<void> {
     if (!interaction.inGuild()) return;
     const user = interaction.options.getUser("name", true);
+    logger.debug(`Resetting user @${user.username} (${user.id})`);
     await db.delete(mcnames).where(eq(mcnames.discordId, BigInt(user.id)));
+    logger.debug("Deleted mcname if set.");
     await db
       .delete(ranking)
       .where(
@@ -45,6 +48,7 @@ export default new (class ResetuserCommand extends Command {
           eq(ranking.guildId, BigInt(interaction.guildId)),
         ),
       );
+    logger.debug("Deleted experience if available.");
     await interaction.reply(
       interaction.locale === "de"
         ? "Der Nutzer wurde zurückgesetzt."

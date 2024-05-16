@@ -2,6 +2,7 @@ import { ranking } from "$/db/ranking";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import { db } from "$/modules/db";
+import logger from "$/modules/logger";
 import { permissions } from "$/modules/utils";
 import {
   type CacheType,
@@ -14,7 +15,6 @@ export default new (class ResetrankCommand extends Command {
   public perm = permissions.dev;
   public name = "resetrank";
   public setup = new SlashCommandBuilder()
-    .setDefaultMemberPermissions("0")
     .setName("resetrank")
     .setDescription("Reset a user's rank")
     .setDescriptionLocalization("de", "Setzt den Rang des Users zurück")
@@ -36,6 +36,7 @@ export default new (class ResetrankCommand extends Command {
   ): Promise<void> {
     if (!interaction.inGuild()) return;
     const user = interaction.options.getUser("user", true);
+    logger.debug(`Resetting rank for @${user.username} (${user.id})`);
     const [xpuser] = await db
       .update(ranking)
       .set({ experience: 0 })
@@ -47,6 +48,7 @@ export default new (class ResetrankCommand extends Command {
       )
       .returning();
     if (!xpuser) {
+      logger.debug("No user to reset rank for.");
       await interaction.reply(
         interaction.locale === "de"
           ? "Dieser Nutzer hat bisher keine Erfahrung gesammelt."
@@ -54,6 +56,7 @@ export default new (class ResetrankCommand extends Command {
       );
       return;
     }
+    logger.debug("Successfully reset user's rank.");
     await interaction.reply(
       interaction.locale === "de"
         ? "Der Rang dieses Nutzers wurde zurückgesetzt."
