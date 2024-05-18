@@ -36,7 +36,7 @@ export default new (class ResetuserCommand extends Command {
     interaction: ChatInputCommandInteraction<CacheType>,
   ): Promise<void> {
     if (!interaction.inGuild()) return;
-    const user = interaction.options.getUser("name", true);
+    const user = interaction.options.getUser("user", true);
     logger.debug(`Resetting user @${user.username} (${user.id})`);
     await db.delete(mcnames).where(eq(mcnames.discordId, BigInt(user.id)));
     logger.debug("Deleted mcname if set.");
