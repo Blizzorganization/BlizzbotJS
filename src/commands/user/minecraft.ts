@@ -50,22 +50,33 @@ export default new (class MinecraftCommand extends Command {
       .where(eq(mcnames.discordId, BigInt(interaction.member.user.id)));
     if (!mcuser?.mcName) {
       previous = false;
-    } else {
-      initialName = mcuser.mcName;
-    }
-    await db
-      .update(mcnames)
-      .set({
+      await db.insert(mcnames).values({
+        discordId: BigInt(interaction.member.user.id),
         mcId: jsonData.id,
         mcName: jsonData.name,
         whitelistTwitch: config.discord.roles.whitelist.twitch.some((r) =>
           interaction.member.roles.resolve(r),
         ),
         whitelistYoutube: config.discord.roles.whitelist.youtube.some((r) =>
-          interaction.member.roles.cache.has(r),
+          interaction.member.roles.resolve(r),
         ),
-      })
-      .where(eq(mcnames.discordId, BigInt(interaction.member.user.id)));
+      });
+    } else {
+      initialName = mcuser.mcName;
+      await db
+        .update(mcnames)
+        .set({
+          mcId: jsonData.id,
+          mcName: jsonData.name,
+          whitelistTwitch: config.discord.roles.whitelist.twitch.some((r) =>
+            interaction.member.roles.resolve(r),
+          ),
+          whitelistYoutube: config.discord.roles.whitelist.youtube.some((r) =>
+            interaction.member.roles.resolve(r),
+          ),
+        })
+        .where(eq(mcnames.discordId, BigInt(interaction.member.user.id)));
+    }
 
     interaction.reply(
       !previous
