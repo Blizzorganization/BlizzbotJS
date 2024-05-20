@@ -2,6 +2,7 @@ import { CustomCommands } from "$/db/CustomCommands";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import { db } from "$/modules/db";
+import config from "$/modules/config";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
@@ -60,7 +61,7 @@ export default new (class EditCommand extends Command {
     }
     await interaction.reply(
       interaction.locale === "de"
-        ? "Der Befehl wurde erfolgreich aktualisiert."
+        ? `Der Befehl wurde ${config.discord.prefix}${ccmd?.commandName} erfolgreich aktualisiert.`
         : "The command was updated.",
     );
   }
