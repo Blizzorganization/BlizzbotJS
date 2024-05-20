@@ -1,8 +1,8 @@
 import { CustomCommands } from "$/db/CustomCommands";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
-import { db } from "$/modules/db";
 import config from "$/modules/config";
+import { db } from "$/modules/db";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";

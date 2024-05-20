@@ -33,8 +33,9 @@ export default new (class CmdCommand extends Command {
       if (!replied) {
         await interaction.reply({ content });
         replied = true;
+      } else {
+        await interaction.channel?.send({ content });
       }
-      await interaction.channel?.send({ content });
     }
   }
 })();
