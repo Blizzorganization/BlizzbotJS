@@ -78,33 +78,23 @@ export default new (class DeleteCommand extends Command {
       .toJSON();
   async run(client: DiscordClient, interaction: ChatInputCommandInteraction) {
     const subCommand = interaction.options.getSubcommand();
-    const subCommandGroup = interaction.options.getSubcommandGroup(false);
-    if (subCommandGroup) {
-      if (subCommandGroup === "alias") {
+    switch (subCommand) {
+      case "customcommand":
+        await deleteCustomCommand(client, interaction);
+        break;
+      case "alias":
         await deleteAlias(client, interaction);
-        return;
-      }
-      await interaction.reply(
-        interaction.locale === "de"
-          ? "Dieser Subcommand scheint nicht vorhanden zu sein, bitte melde dich beim Entwickler."
-          : "This subcommand does not seem to exist. please contact the developer.",
-      );
-    } else {
-      switch (subCommand) {
-        case "customcommand":
-          await deleteCustomCommand(client, interaction);
-          break;
-        case "blacklistword":
-          await deleteBLWord(client, interaction);
-          break;
-        default:
-          logger.warning(`Unknown subcommand delete.${subCommand}`);
-          await interaction.reply(
-            interaction.locale === "de"
-              ? "Dieser Subcommand scheint nicht vorhanden zu sein, bitte melde dich beim Entwickler."
-              : "This subcommand does not seem to exist. please contact the developer.",
-          );
-      }
+        break;
+      case "blacklistword":
+        await deleteBLWord(client, interaction);
+        break;
+      default:
+        logger.warning(`Unknown subcommand delete.${subCommand}`);
+        await interaction.reply(
+          interaction.locale === "de"
+            ? "Dieser Subcommand scheint nicht vorhanden zu sein, bitte melde dich beim Entwickler."
+            : "This subcommand does not seem to exist. please contact the developer.",
+        );
     }
   }
 })();

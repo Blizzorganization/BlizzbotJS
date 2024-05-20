@@ -13,13 +13,21 @@ export async function deleteCustomCommand(
   let name = interaction.options.getString("name", true).toLowerCase();
   if (name.startsWith(config.discord.prefix))
     name = name.replace(config.discord.prefix, "");
+  logger.info(`Deleting Customcommand: ${name}`);
   const [ccmd] = await db
-    .select()
-    .from(CustomCommands)
-    .where(eq(CustomCommands.commandName, name));
-  logger.info(`Delete Customcommand: ${ccmd?.commandName}`);
-
-  interaction.reply({
+    .delete(CustomCommands)
+    .where(eq(CustomCommands.commandName, name))
+    .returning();
+  if (!ccmd) {
+    await interaction.reply({
+      content:
+        interaction.locale === "de"
+          ? `Es existiert kein Befehl "${config.discord.prefix}${name}".`
+          : `There was no CustomCommand "${config.discord.prefix}${name}".`,
+    });
+    return;
+  }
+  await interaction.reply({
     content:
       interaction.locale === "de"
         ? `Der Befehl ${config.discord.prefix}${name} wurde gelöscht.`
