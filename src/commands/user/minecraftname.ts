@@ -44,9 +44,10 @@ export default new (class MinecraftnameCommand extends Command {
       return;
     }
     const embed = new EmbedBuilder()
-      .setTitle(user.username)
+      .setTitle("**__Linking Information__**")
       .setColor(0xedbc5d)
-      .setThumbnail(`https://crafatar.com/renders/body/${mcUser.mcId}?overlay`)
+      .setThumbnail(`https://crafatar.com/renders/body/${mcUser.mcId}/?overlay`)
+      .addFields([{ name: "Discord-Name", value: user.username }])
       .addFields([{ name: "Minecraft-Name", value: mcUser.mcName ?? "" }]);
     interaction.reply({ embeds: [embed] });
   }
