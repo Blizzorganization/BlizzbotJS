@@ -46,7 +46,9 @@ export default new (class MinecraftnameCommand extends Command {
     const embed = new EmbedBuilder()
       .setTitle("**__Linking Information__**")
       .setColor(0xedbc5d)
-      .setThumbnail(`https://skins.danielraybone.com/v1/render/body/${mcUser.mcName}`)
+      .setThumbnail(
+        `https://skins.danielraybone.com/v1/render/body/${mcUser.mcName}`,
+      )
       .addFields([{ name: "Discord-Name", value: user.username }])
       .addFields([{ name: "Minecraft-Name", value: mcUser.mcName ?? "" }]);
     interaction.reply({ embeds: [embed] });
