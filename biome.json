@@ -4,7 +4,7 @@
     "enabled": true
   },
   "files": {
-    "ignore": [".direnv", "node_modules"]
+    "ignore": [".direnv", "node_modules", "logs"]
   },
   "linter": {
     "enabled": true,

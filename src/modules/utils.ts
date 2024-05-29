@@ -100,9 +100,9 @@ async function loadEvents(listener: DiscordClient, directory: URL) {
       continue;
     }
     if (event.once) {
-      listener.once(event.eventName, event.handle.bind(null, listener));
+      listener.once(event.eventName, event.handle.bind(event, listener));
     } else {
-      listener.on(event.eventName, event.handle.bind(null, listener));
+      listener.on(event.eventName, event.handle.bind(event, listener));
     }
   }
 }
