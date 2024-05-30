@@ -12,7 +12,7 @@ export async function addAlias(
   await db.insert(Aliases).values({ command, name: alias });
   await interaction.reply(
     interaction.locale === "de"
-      ? "Der Alias wurde erfolgreich hinzugefügt"
+      ? `Der Alias !${alias} wurde für !${command} erfolgreich hinzugefügt`
       : "The Alias was added.",
   );
 }

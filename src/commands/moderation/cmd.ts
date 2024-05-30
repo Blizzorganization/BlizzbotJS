@@ -27,6 +27,10 @@ export default new (class CmdCommand extends Command {
     const commandNames = cmds.map(
       (cmd) => `${config.discord.prefix}${cmd.name}`,
     );
+    if (commandNames.length === 0) {
+      await interaction.reply("Es ist kein Command hinterlegt.");
+      return;
+    }
     const msg = `Es existieren folgende Befehle: ${commandNames.join(", ")}`;
     let replied = false;
     for (const content of splitMessage(msg, { char: ", " })) {
