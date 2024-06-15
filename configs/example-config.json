@@ -2,14 +2,14 @@
   "discord": {
     "token": "Discordtoken",
     "prefix": "!",
-    "verifymessage": "ID from verifymessage",
+    "verificationMessage": "ID from verifymessage",
     "channels": {
       "log": "ID from logchannel",
       "commands": ["ID from commandchannel"],
       "modCommands": ["ID from modchannel"],
       "adminCommands": ["ID from adminchannel"],
       "clips": "ID from Clip-Channel",
-      "ignore": ["Id of an ignored channel"],
+      "ignore": ["ID of an ignored channel"],
       "standard": "ID from all-Channel",
       "anfrage": "ID from anfrage-Channel",
       "verificate": "ID from verify-Channel",
@@ -24,6 +24,7 @@
       },
       "noFilter": ["123"],
       "verify": "RoleID",
+      "notify": "RoleID",
       "mute": "RoleID",
       "dev": "RoleID",
       "mod": "RoleID"
@@ -31,7 +32,7 @@
     "emojis": {
       "left": "ID from emote",
       "right": "ID from emote",
-      "randomReaction": "Id from randomemote"
+      "randomReaction": "ID from randomemote"
     }
   },
   "database": {
