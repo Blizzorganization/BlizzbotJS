@@ -1,10 +1,10 @@
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import config from "$/modules/config";
-import { permissions } from "$/modules/utils";
-import type { CacheType, ChatInputCommandInteraction } from "discord.js";
-import { SlashCommandBuilder } from "discord.js";
 import logger from "$/modules/logger";
+import { permissions } from "$/modules/utils";
+import { SlashCommandBuilder } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 
 export default new (class NotifyCommand extends Command {
   public perm = permissions.user;
