@@ -2,31 +2,32 @@
   "name": "blizzbotjs",
   "version": "1.1.3",
   "description": "Discord Bot for Blizzor",
-  "main": "blizzbot.js",
+  "main": "src/blizzbot.ts",
   "type": "module",
   "scripts": {
-    "start": "node blizzbot.js"
+    "start": "bun src/blizzbot.ts",
+    "migration:new": "drizzle-kit generate"
   },
-  "keywords": [
-    "blizzbot",
-    "discord",
-    "blizzor"
-  ],
+  "keywords": ["blizzbot", "discord", "blizzor"],
   "author": "BlackDemonFire",
   "license": "MIT",
   "dependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@devnote-dev/pterojs": "^1.4.2",
-    "@discordjs/builders": "^0.13.0",
-    "discord.js": "^13.7.0",
-    "eslint": "^8.14.0",
-    "mysql2": "^2.3.0",
-    "node-fetch": "^3.2.10",
-    "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.19.2",
-    "winston": "^3.6.0",
-    "winston-daily-rotate-file": "^4.6.1"
+    "@robertsspaceindustries/pterojs": "^2.2.2",
+    "discord.js": "^14.15.2",
+    "drizzle-kit": "^0.21.4",
+    "drizzle-orm": "^0.30.10",
+    "postgres": "^3.4.4",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "znv": "^0.4.0",
+    "zod": "^3.23.8",
+    "zod-config": "^0.0.2"
   },
-  "babel": {}
+  "devDependencies": {
+    "@biomejs/biome": "^1.7.3",
+    "@types/bun": "^1.1.3"
+  },
+  "engines": {
+    "node": "^20.12.2"
+  }
 }

@@ -13,3 +13,6 @@ configs/*
 #don't commit documentation
 zdocs/
 whitelist/
+
+.direnv
+.cache

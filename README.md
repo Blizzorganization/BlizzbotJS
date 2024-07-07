@@ -1,16 +1,19 @@
 # Blizzbot
+
 ### A Discord bot developed for Content Creator [Blizzor](https://blizzor.de)
 
 This bot is capable of handling [Discord](https://discord.com) features.
 
 # Installation
-Prequisites:
-> This bot runs on node.js and uses the Discord.js library.  It uses a Postgresql database as a back-end.
 
-It requires the following: 
+Prequisites:
+
+> This bot runs on [bun](https://bun.sh) and uses the Discord.js library. It uses a Postgresql database as a back-end.
+
+It requires the following:
 
 - `git` command line ([Windows](https://git-scm.com/download/win)|[Linux](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)|[MacOS](https://git-scm.com/download/mac)) installed
-- [Nodejs 16.0.0 or higher](http://nodejs.org/)
+- Bun
 - A Postgres instance. The installation for Windows and MacOS is found at [Installation Guide](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads), for Linux use your package manager.
 <details>
 <summary>example for Debian+Ubuntu</summary>
@@ -29,19 +32,25 @@ sudo apt-get update
 # If you want a specific version, use 'postgresql-12' or similar instead of 'postgresql':
 sudo apt-get -y install postgresql
 ```
+
 </details>
 
 # Installation
+
 You can install the bot using
+
 ```sh
 npm install
 ```
+
 To start the bot use
+
 ```sh
-node blizzbot.js
-```
-or
-```sh
-npm run start
+bun src/blizzbot.ts
 ```
 
+or
+
+```sh
+bun start
+```
