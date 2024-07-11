@@ -27,7 +27,8 @@
       "notify": "RoleID",
       "mute": "RoleID",
       "dev": "RoleID",
-      "mod": "RoleID"
+      "mod": "RoleID",
+      "bot": "RoleID"
     },
     "emojis": {
       "left": "ID from emote",

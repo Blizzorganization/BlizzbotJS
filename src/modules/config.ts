@@ -55,6 +55,7 @@ const discordConfigSchema = z.object({
     notify: snowflakeSchema,
     dev: snowflakeSchema,
     mod: snowflakeSchema,
+    bot: snowflakeSchema,
   }),
   emojis: z.object({
     left: snowflakeSchema,
@@ -96,6 +97,7 @@ const defaultConfig: z.infer<typeof configSchema> = {
       notify: "1234",
       dev: "1234",
       mod: "1234",
+      bot: "1234"
     },
     emojis: {
       left: "1234",
@@ -130,6 +132,7 @@ export const configSchema = z.object({
   database: databaseConfigSchema,
   discord: discordConfigSchema,
   pterodactyl: pteroConfigSchema,
+  logSql: z.oboolean(),
 });
 
 export default await loadConfig({
