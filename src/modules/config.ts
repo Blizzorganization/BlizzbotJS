@@ -97,7 +97,7 @@ const defaultConfig: z.infer<typeof configSchema> = {
       notify: "1234",
       dev: "1234",
       mod: "1234",
-      bot: "1234"
+      bot: "1234",
     },
     emojis: {
       left: "1234",
