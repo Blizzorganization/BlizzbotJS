@@ -21,7 +21,7 @@ export class Ptero {
       return;
     }
     logger.debug("writing file to pterodactyl server");
-    srv.files.write(filepath, content);
+    await srv.files.write(filepath, content);
     logger.debug("wrote file to pterodactyl server.");
   }
 }

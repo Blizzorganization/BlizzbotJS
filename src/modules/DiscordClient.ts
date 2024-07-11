@@ -120,16 +120,20 @@ class DiscordClient<Ready extends boolean = boolean> extends Client<Ready> {
     const pteroTwFile = readFileSync("whitelist/twitch/pterodactyl.txt", "utf8")
       .split(EOL)
       .filter((path) => path !== "");
-    for (const srv of pteroYtFile) {
-      const [serverid, whitelistpath] = srv.split(" ");
-      if (!serverid || !whitelistpath) return;
-      ptero.writeFile(serverid, whitelistpath, ytlist);
-    }
-    for (const srv of pteroTwFile) {
-      const [serverid, whitelistpath] = srv.split(" ");
-      if (!serverid || !whitelistpath) return;
-      ptero.writeFile(serverid, whitelistpath, twlist);
-    }
+    await Promise.all(
+      pteroYtFile.map(async (srv) => {
+        const [serverid, whitelistpath] = srv.split(" ");
+        if (!serverid || !whitelistpath) return;
+        await ptero.writeFile(serverid, whitelistpath, ytlist);
+      }),
+    );
+    await Promise.all(
+      pteroTwFile.map(async (srv) => {
+        const [serverid, whitelistpath] = srv.split(" ");
+        if (!serverid || !whitelistpath) return;
+        await ptero.writeFile(serverid, whitelistpath, twlist);
+      }),
+    );
   }
 }
 

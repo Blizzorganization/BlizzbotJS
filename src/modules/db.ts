@@ -4,5 +4,5 @@ import postgres from "postgres";
 import config from "./config";
 
 export const sql = postgres(config.database);
-export const db = drizzle(sql, { logger: true });
+export const db = drizzle(sql, { logger: config.logSql });
 await migrate(db, { migrationsFolder: "drizzle" });

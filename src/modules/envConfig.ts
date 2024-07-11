@@ -23,6 +23,7 @@ const fromEnv = parseEnv(process.env, {
   DISCORD_ROLES_NOTIFY: snowflake().optional(),
   DISCORD_ROLES_DEV: snowflake().optional(),
   DISCORD_ROLES_MOD: snowflake().optional(),
+  DISCORD_ROLES_BOT: snowflake().optional(),
   DISCORD_EMOJIS_LEFT: snowflake().optional(),
   DISCORD_EMOJIS_RIGHT: snowflake().optional(),
   DISCORD_EMOJIS_RANDOMREACTION: snowflake().optional(),
@@ -33,6 +34,7 @@ const fromEnv = parseEnv(process.env, {
   DATABASE_USER: z.string().optional(),
   DATABASE_DATABASE: z.string().optional(),
   DATABASE_PASSWORD: z.string().optional(),
+  DATABASE_LOGS: z.boolean().optional(),
 });
 export default {
   discord: {
@@ -63,6 +65,7 @@ export default {
       notify: fromEnv.DISCORD_ROLES_NOTIFY,
       dev: fromEnv.DISCORD_ROLES_DEV,
       mod: fromEnv.DISCORD_ROLES_MOD,
+      bot: fromEnv.DISCORD_ROLES_BOT,
     },
     emojis: {
       left: fromEnv.DISCORD_EMOJIS_LEFT,
@@ -81,6 +84,7 @@ export default {
     port: fromEnv.DATABASE_PORT,
     user: fromEnv.DATABASE_USER,
   },
+  logSql: fromEnv.DATABASE_LOGS,
 };
 function snowflake(): z.ZodString {
   return z.string().regex(/^\d+$/);

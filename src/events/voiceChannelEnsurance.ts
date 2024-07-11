@@ -12,7 +12,12 @@ import type {
   VoiceBasedChannel,
   VoiceState,
 } from "discord.js";
-import { ChannelType, Events, OverwriteType } from "discord.js";
+import {
+  ChannelType,
+  Events,
+  OverwriteType,
+  PermissionFlagsBits,
+} from "discord.js";
 
 export default new (class VoiceChannelEnsuranceHandler extends EventListener<Events.VoiceStateUpdate> {
   public eventName = Events.VoiceStateUpdate as const;
@@ -96,7 +101,8 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
         (vc) => vc.name === `Channel ${textVoiceIndex}`,
       );
       if (!voiceChannel || voiceChannel.members.size === 0)
-        await textVoiceChannnel.delete();
+        logger.info(`Deleting Text voice channel ${textVoiceChannnel.name}`);
+      await textVoiceChannnel.delete();
     }
   }
 
@@ -131,7 +137,10 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
           c.name === `text-voice-${vcIdx}`,
       );
       await vc.delete();
-      await textVoice?.delete();
+      if (textVoice) {
+        logger.info(`Deleting Text voice channel ${textVoice.name}`);
+        await textVoice.delete();
+      }
       emptyVCs.delete(vc.id);
       logger.debug("Deleting extra empty voice channels");
     }
@@ -140,7 +149,7 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
     return {
       type: OverwriteType.Member,
       id: member.id,
-      allow: "ViewChannel",
+      allow: PermissionFlagsBits.ViewChannel,
     };
   }
   basePermissionOverwrites(guildId: Snowflake): OverwriteResolvable[] {
@@ -148,12 +157,18 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
       {
         type: OverwriteType.Role,
         id: guildId,
-        deny: "ViewChannel",
+        deny: PermissionFlagsBits.ViewChannel,
       },
       {
         type: OverwriteType.Role,
         id: config.discord.roles.mod,
-        allow: "ViewChannel",
+        allow: PermissionFlagsBits.ViewChannel,
+      },
+      {
+        type: OverwriteType.Role,
+        id: config.discord.roles.bot,
+        allow:
+          PermissionFlagsBits.ViewChannel | PermissionFlagsBits.ManageChannels,
       },
     ];
   }

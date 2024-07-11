@@ -78,11 +78,11 @@ export default new (class MinecraftCommand extends Command {
         .where(eq(mcnames.discordId, BigInt(interaction.member.user.id)));
     }
 
-    interaction.reply(
+    await interaction.reply(
       !previous
         ? `Dein Minecraftname **${jsonData.name}** wurde erfolgreich hinzugefügt.`
         : `Du hast deinen Minecraftnamen von **${initialName}** auf **${jsonData.name}** aktualisiert.`,
     );
-    client.syncWhitelist();
+    await client.syncWhitelist();
   }
 })();

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2021 BlackDemonFire, Speed_r and Blizzor
+Copyright (c) 2024 BlackDemonFire, Speed_r and Blizzor
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
