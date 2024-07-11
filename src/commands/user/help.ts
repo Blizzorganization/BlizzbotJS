@@ -44,11 +44,13 @@ export default new (class HelpCommand extends Command {
         },
         {
           name: "/anfrage",
-          value: "Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden",
+          value:
+            "Schreibe dem Bot eine Anfrage, die direkt an die Moderatoren privat weitergeleitet werden",
         },
         {
           name: "/notify",
-          value: "Vergibt/entzieht die Benachrichtigungsrolle für Streams/Videos",
+          value:
+            "Vergibt/entzieht die Benachrichtigungsrolle für Streams/Videos",
         },
       );
     if (client.user)
