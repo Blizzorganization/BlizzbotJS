@@ -21,7 +21,7 @@
     "winston-daily-rotate-file": "^5.0.0",
     "znv": "^0.4.0",
     "zod": "^3.23.8",
-    "zod-config": "^0.0.2"
+    "zod-config": "^0.0.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
