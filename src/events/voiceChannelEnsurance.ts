@@ -100,9 +100,10 @@ export default new (class VoiceChannelEnsuranceHandler extends EventListener<Eve
       const voiceChannel = voicechannels.find(
         (vc) => vc.name === `Channel ${textVoiceIndex}`,
       );
-      if (!voiceChannel || voiceChannel.members.size === 0)
+      if (!voiceChannel || voiceChannel.members.size === 0) {
         logger.info(`Deleting Text voice channel ${textVoiceChannnel.name}`);
-      await textVoiceChannnel.delete();
+        await textVoiceChannnel.delete();
+      }
     }
   }
 

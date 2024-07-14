@@ -35,12 +35,12 @@ sudo apt-get -y install postgresql
 
 </details>
 
-# Installation
+# Running
 
 You can install the bot using
 
 ```sh
-npm install
+bun install
 ```
 
 To start the bot use
