@@ -39,7 +39,7 @@ export default new (class MessageHandler extends EventListener<Events.MessageCre
       ) {
         logger.debug("verifying user..");
         resolvedMessage.member?.roles.add(config.discord.roles.verify);
-        verify(client, resolvedMessage.author.username);
+        await verify(client, resolvedMessage.author.username);
       }
       if (resolvedMessage.deletable) resolvedMessage.delete();
       return;

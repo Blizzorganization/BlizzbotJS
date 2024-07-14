@@ -27,10 +27,7 @@ export default new (class StreamchannelCommand extends Command {
       return;
     }
     const vc = interaction.member.voice.channel;
-    if (
-      !vc.parentId ||
-      !config.discord.channels.voiceCategory.includes(vc.parentId)
-    ) {
+    if (!vc.parentId || config.discord.channels.voiceCategory !== vc.parentId) {
       await interaction.reply({
         content:
           "Um einen Streamchannel zu erzeugen musst du dich in einem Standard Voicechannel befinden.",
