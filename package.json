@@ -15,7 +15,7 @@
     "@robertsspaceindustries/pterojs": "^2.2.2",
     "discord.js": "^14.15.3",
     "drizzle-kit": "^0.23.0",
-    "drizzle-orm": "^0.32.0",
+    "drizzle-orm": "^0.33.0",
     "postgres": "^3.4.4",
     "winston": "^3.13.1",
     "winston-daily-rotate-file": "^5.0.0",
