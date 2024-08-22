@@ -3,7 +3,12 @@ import { existsSync, readdirSync, statSync } from "node:fs";
 import { PassThrough } from "node:stream";
 import { URL } from "node:url";
 import { mcnames } from "$/db/mcnames";
-import type { Collection, Message, User } from "discord.js";
+import {
+  type Collection,
+  type Message,
+  SnowflakeUtil,
+  type User,
+} from "discord.js";
 import { sql } from "drizzle-orm";
 import type DiscordClient from "./DiscordClient";
 import { EventListener } from "./EventListener";
@@ -178,9 +183,13 @@ async function verify(client: DiscordClient, username: string): Promise<void> {
     );
     return;
   }
-  await standardChannel.send({ content: msg });
+  const nonce = SnowflakeUtil.generate();
+  await standardChannel.send({
+    content: msg,
+    enforceNonce: true,
+    nonce: nonce.toString(),
+  });
 }
-
 export {
   checkWhitelist,
   createTable,
