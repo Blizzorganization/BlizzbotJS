@@ -4,9 +4,9 @@ import { PassThrough } from "node:stream";
 import { URL } from "node:url";
 import { mcnames } from "$/db/mcnames";
 import {
-  SnowflakeUtil,
   type Collection,
   type Message,
+  SnowflakeUtil,
   type User,
 } from "discord.js";
 import { sql } from "drizzle-orm";
@@ -190,7 +190,6 @@ async function verify(client: DiscordClient, username: string): Promise<void> {
     nonce: nonce.toString(),
   });
 }
-
 export {
   checkWhitelist,
   createTable,
