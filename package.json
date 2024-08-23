@@ -14,7 +14,7 @@
   "dependencies": {
     "@robertsspaceindustries/pterojs": "^2.2.2",
     "discord.js": "^14.15.3",
-    "drizzle-kit": "^0.23.0",
+    "drizzle-kit": "^0.24.1",
     "drizzle-orm": "^0.32.0",
     "postgres": "^3.4.4",
     "winston": "^3.13.1",
