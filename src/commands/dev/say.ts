@@ -49,7 +49,7 @@ export default new (class SayCommand extends Command {
         ChannelType.GuildText | ChannelType.PublicThread
       >("channel", false) ??
       (await client.channels.fetch(config.discord.channels.standard));
-    if (!channel?.isTextBased()) {
+    if (!channel?.isSendable()) {
       await interaction.reply(
         "Der in der konfigurierte Kanal ist kein Textkanal.",
       );

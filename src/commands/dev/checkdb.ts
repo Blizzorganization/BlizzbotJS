@@ -5,6 +5,7 @@ import { ranking } from "$/db/ranking";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import { db } from "$/modules/db";
+import logger from "$/modules/logger";
 import { splitMessage } from "$/modules/splitMessage";
 import { createTable, permissions } from "$/modules/utils";
 import mkOption from "$/utils/mkOption";
@@ -111,7 +112,13 @@ export default new (class CheckDBCommand extends Command {
         replied = true;
         await interaction.reply(toSend);
       } else {
-        await interaction.channel?.send(toSend);
+        if (!interaction.channel || !interaction.channel.isSendable()) {
+          logger.error(
+            `Could not send table to the channel ${interaction.channel?.name}`,
+          );
+          return;
+        }
+        await interaction.channel.send(toSend);
       }
     }
   }

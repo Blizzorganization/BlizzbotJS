@@ -34,7 +34,7 @@ export default new (class MessageDeleteHandler extends EventListener<Events.Mess
       inline: false,
     });
     if (!client.logChannel) return;
-    if (!client.logChannel.isTextBased()) {
+    if (!client.logChannel.isSendable()) {
       logger.warning(`Deleted message as the log channel is not text based:
 ${message.content || "Inhalt nicht auslesbar"}
 by ${message.author.tag} in ${message.channel.name} (${message.guild.name})`);

@@ -16,3 +16,4 @@ whitelist/
 
 .direnv
 .cache
+result

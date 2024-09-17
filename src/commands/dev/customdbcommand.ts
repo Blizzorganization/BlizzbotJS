@@ -6,6 +6,7 @@ import { splitMessage } from "$/modules/splitMessage";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
+import logger from "$/modules/logger";
 
 export default new (class CustomDBCommandCommand extends Command {
   public perm = permissions.dev;
@@ -37,7 +38,13 @@ export default new (class CustomDBCommandCommand extends Command {
           await interaction.reply(reasonPart);
           replied = true;
         } else {
-          await interaction.channel?.send(reasonPart);
+          if (!interaction.channel || !interaction.channel.isSendable()) {
+            logger.error(
+              `Could not send table to the channel ${interaction.channel?.name}`,
+            );
+            return;
+          }
+          await interaction.channel.send(reasonPart);
         }
       }
     });
@@ -55,7 +62,13 @@ export default new (class CustomDBCommandCommand extends Command {
         await interaction.reply(resultPart);
         replied = true;
       } else {
-        await interaction.channel?.send(resultPart);
+        if (!interaction.channel || !interaction.channel.isSendable()) {
+          logger.error(
+            `Could not send table to the channel ${interaction.channel?.name}`,
+          );
+          return;
+        }
+        await interaction.channel.send(resultPart);
       }
     }
   }
