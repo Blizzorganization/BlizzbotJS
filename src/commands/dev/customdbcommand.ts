@@ -2,11 +2,11 @@ import { inspect } from "node:util";
 import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import { sql } from "$/modules/db";
+import logger from "$/modules/logger";
 import { splitMessage } from "$/modules/splitMessage";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
-import logger from "$/modules/logger";
 
 export default new (class CustomDBCommandCommand extends Command {
   public perm = permissions.dev;
