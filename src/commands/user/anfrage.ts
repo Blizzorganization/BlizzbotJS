@@ -3,7 +3,11 @@ import { Command } from "$/modules/command";
 import config from "$/modules/config";
 import logger from "$/modules/logger";
 import { permissions } from "$/modules/utils";
-import type { CacheType, ChatInputCommandInteraction } from "discord.js";
+import type {
+  CacheType,
+  ChatInputCommandInteraction,
+  DMChannel,
+} from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 
 export default new (class AnfrageCommand extends Command {
@@ -33,12 +37,13 @@ export default new (class AnfrageCommand extends Command {
       ephemeral: true,
     });
     if (!msg) return;
-    const coll = msg.channel.createMessageCollector({
+    const messageChannel = msg.channel as DMChannel;
+    const coll = messageChannel.createMessageCollector({
       max: 1,
       filter: (m) => m.author.id === interaction.member?.user.id,
     });
     coll.on("collect", async (m) => {
-      m.channel.send("Vielen Dank für Ihre Anfrage!");
+      await messageChannel.send("Vielen Dank für Ihre Anfrage!");
       if (!client.anfrageChannel)
         client.anfrageChannel =
           (await client.channels.fetch(config.discord.channels.anfrage)) ??

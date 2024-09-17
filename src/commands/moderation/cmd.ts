@@ -3,6 +3,7 @@ import type DiscordClient from "$/modules/DiscordClient";
 import { Command } from "$/modules/command";
 import config from "$/modules/config";
 import { db } from "$/modules/db";
+import logger from "$/modules/logger";
 import { splitMessage } from "$/modules/splitMessage";
 import { permissions } from "$/modules/utils";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
@@ -38,7 +39,13 @@ export default new (class CmdCommand extends Command {
         await interaction.reply({ content });
         replied = true;
       } else {
-        await interaction.channel?.send({ content });
+        if (!interaction.channel || !interaction.channel.isSendable()) {
+          logger.error(
+            `Could not send table to the channel ${interaction.channel?.name}`,
+          );
+          return;
+        }
+        await interaction.channel.send({ content });
       }
     }
   }

@@ -177,7 +177,7 @@ async function verify(client: DiscordClient, username: string): Promise<void> {
     );
     return;
   }
-  if (!standardChannel.isTextBased()) {
+  if (!standardChannel.isSendable()) {
     logger.error(
       `Configuration: standard channel is not a text based channel. Could not send verification message for ${username}.`,
     );
